@@ -1,0 +1,140 @@
+# ============================================================
+#  base_config.yaml
+#  Hiperparámetros base para el benchmarking CNN (TA-003, TA-004)
+#  IMPORTANTE: NO modificar estos valores entre modelos.
+#  El benchmarking requiere condiciones idénticas.
+#  Variaciones solo permitidas en TA-005 (modelo ganador).
+# ============================================================
+
+project:
+  name: "Sistema Multimodal IA - Vargas Vet"
+  course: "Taller Integrador I - UPAO"
+  seed: 42
+
+# ----------------------------------------------------------
+# Rutas (ajustar si la estructura local difiere)
+# ----------------------------------------------------------
+paths:
+  base_radiografias: "D:/UPAO_Diogho_Baylon/IX/Taller Integrador I/ModelosIA/Radiografias"
+  dataset_split: "D:/UPAO_Diogho_Baylon/IX/Taller Integrador I/ModelosIA/Radiografias/dataset_split"
+  manifests_dir: "D:/UPAO_Diogho_Baylon/IX/Taller Integrador I/ModelosIA/Radiografias/dataset_split/manifests"
+  train_csv: "D:/UPAO_Diogho_Baylon/IX/Taller Integrador I/ModelosIA/Radiografias/dataset_split/manifests/train.csv"
+  val_csv:   "D:/UPAO_Diogho_Baylon/IX/Taller Integrador I/ModelosIA/Radiografias/dataset_split/manifests/val.csv"
+  test_csv:  "D:/UPAO_Diogho_Baylon/IX/Taller Integrador I/ModelosIA/Radiografias/dataset_split/manifests/test.csv"
+  checkpoints_dir: "./checkpoints"
+  results_dir: "./results"
+
+# ----------------------------------------------------------
+# Dataset
+# ----------------------------------------------------------
+dataset:
+  image_size: 224
+  num_channels: 3           # canal gris replicado × 3 (pseudo-RGB)
+  classes:
+    - "alveolar_pattern"
+    - "bronchial_pattern"
+    - "pleural_effusion"
+    - "cardiomegaly"
+    - "no_finding"
+  num_classes: 5
+  exclude_tags:             # tags excluidos por insuficiencia estadística
+    - "fracture"
+    - "pneumomediastinum"
+    - "costal_fracture"
+    - "exclude"
+
+# ----------------------------------------------------------
+# Entrenamiento (idéntico para los 3 modelos — benchmarking)
+# ----------------------------------------------------------
+training:
+  epochs_max: 50
+  batch_size: 32            # DenseNet-121: usar 16 si hay problemas de VRAM
+  learning_rate: 1.0e-4
+  weight_decay: 1.0e-4
+  optimizer: "AdamW"
+  loss: "BCEWithLogitsLoss" # + class weights (calculados en train)
+  use_class_weights: true
+  use_mixed_precision: true # torch.cuda.amp — recomendado para RTX 4060
+
+  # Early stopping
+  early_stopping:
+    patience: 10
+    monitor: "val_auc"
+    mode: "max"
+
+  # Transfer learning: 2 fases
+  transfer_learning:
+    phase1_epochs: 5        # feature extraction (solo cabeza entrenada)
+    phase1_lr: 1.0e-4
+    phase2_lr: 1.0e-5       # fine-tuning completo (LR bajo para capas tempranas)
+
+  # Dropout en clasificador
+  dropout: 0.4
+
+# ----------------------------------------------------------
+# Schedulers (varían por modelo)
+# ----------------------------------------------------------
+schedulers:
+  resnet50:
+    type: "ReduceLROnPlateau"
+    factor: 0.5
+    patience: 5
+    min_lr: 1.0e-7
+
+  efficientnet_b0:
+    type: "CosineAnnealingWarmRestarts"
+    T_0: 10
+    T_mult: 2
+    warmup_epochs: 5        # warm-up lineal 0 → lr inicial
+
+  densenet121:
+    type: "ReduceLROnPlateau"
+    factor: 0.5
+    patience: 5
+    min_lr: 1.0e-7
+
+# ----------------------------------------------------------
+# Data Augmentation
+# ----------------------------------------------------------
+augmentation:
+  train:
+    random_horizontal_flip: 0.5
+    random_rotation_degrees: 10
+    random_brightness: 0.2
+    random_contrast: 0.2
+    normalize_mean: [0.485, 0.456, 0.406]  # ImageNet stats
+    normalize_std:  [0.229, 0.224, 0.225]
+  val_test:
+    normalize_mean: [0.485, 0.456, 0.406]
+    normalize_std:  [0.229, 0.224, 0.225]
+
+# ----------------------------------------------------------
+# Hardware
+# ----------------------------------------------------------
+hardware:
+  device: "cuda"            # fallback a "cpu" si no hay GPU
+  gpu_name: "RTX 4060"
+  vram_gb: 8
+  gradient_checkpointing: false  # activar para DenseNet-121 si VRAM insuficiente
+
+# ----------------------------------------------------------
+# Métricas (para DO-002 — tabla comparativa benchmarking)
+# ----------------------------------------------------------
+metrics:
+  primary: "val_auc"        # métrica de selección del ganador
+  thresholds:
+    auc_min: 0.75           # umbral mínimo O3 (benchmarking)
+    auc_target: 0.80        # objetivo O4 (modelo ganador)
+    f1_min: 0.75            # umbral mínimo en test
+    inference_max_sec: 6.0  # tiempo máximo de inferencia
+
+  record:
+    - "val_auc"
+    - "val_f1_macro"
+    - "val_accuracy"
+    - "test_auc"
+    - "test_f1_macro"
+    - "test_accuracy"
+    - "inference_time_sec"
+    - "epochs_trained"
+    - "best_epoch"
