@@ -1,0 +1,18 @@
+{
+    "model": "densenet121_chexnet",
+    "pretrained_weights": "CheXNet (densenet121-res224-chex)",
+    "val_auc": 0.7469154755364327,
+    "test_auc": 0.7401117732454511,
+    "test_f1_macro": 0.4308804157088485,
+    "test_accuracy": 0.7153191489361702,
+    "epochs_trained": 30,
+    "best_epoch": 30,
+    "inference_time_sec": 0.0012500286102294922,
+    "batch_size": 16,
+    "dropout": 0.5,
+    "weight_decay": 0.0005,
+    "grad_clip": 1.0,
+    "cumple_O4_auc": false,
+    "cumple_O4_f1": false,
+    "cumple_inferencia": true
+}
