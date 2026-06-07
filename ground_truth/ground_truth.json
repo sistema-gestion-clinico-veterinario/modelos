@@ -1,207 +1,1314 @@
-
 {
   "AKIRA-CHAVARRY-2026-05-14-0914.pdf": {
     "rows": [
-      {"item": "RBC", "resultado": "7.81", "referencia": "5.65 - 8.87 M/µL", "flag": ""},
-      {"item": "Hematocrit", "resultado": "53.0", "referencia": "37.3 - 61.7 %", "flag": ""},
-      {"item": "Hemoglobin", "resultado": "17.7", "referencia": "13.1 - 20.5 g/dL", "flag": ""},
-      {"item": "MCV", "resultado": "67.9", "referencia": "61.6 - 73.5 fL", "flag": ""},
-      {"item": "MCH", "resultado": "22.7", "referencia": "21.2 - 25.9 pg", "flag": ""},
-      {"item": "MCHC", "resultado": "33.4", "referencia": "32.0 - 37.9 g/dL", "flag": ""},
-      {"item": "RDW", "resultado": "15.6", "referencia": "13.6 - 21.7 %", "flag": ""},
-      {"item": "% Reticulocytes", "resultado": "1.7", "referencia": "%", "flag": ""},
-      {"item": "Reticulocytes", "resultado": "129.6", "referencia": "10.0 - 110.0 K/µL", "flag": "H"},
-      {"item": "Reticulocyte Hemoglobin", "resultado": "26.0", "referencia": "22.3 - 29.6 pg", "flag": ""},
-      {"item": "WBC", "resultado": "10.28", "referencia": "5.05 - 16.76 K/µL", "flag": ""},
-      {"item": "% Neutrophils", "resultado": "35.4", "referencia": "%", "flag": ""},
-      {"item": "% Lymphocytes", "resultado": "59.7", "referencia": "%", "flag": ""},
-      {"item": "% Monocytes", "resultado": "3.8", "referencia": "%", "flag": ""},
-      {"item": "% Eosinophils", "resultado": "1.0", "referencia": "%", "flag": ""},
-      {"item": "% Basophils", "resultado": "0.1", "referencia": "%", "flag": ""},
-      {"item": "Neutrophils", "resultado": "3.64", "referencia": "2.95 - 11.64 K/µL", "flag": ""},
-      {"item": "Lymphocytes", "resultado": "6.14", "referencia": "1.05 - 5.10 K/µL", "flag": "H"},
-      {"item": "Monocytes", "resultado": "0.39", "referencia": "0.16 - 1.12 K/µL", "flag": ""},
-      {"item": "Eosinophils", "resultado": "0.10", "referencia": "0.06 - 1.23 K/µL", "flag": ""},
-      {"item": "Basophils", "resultado": "0.01", "referencia": "0.00 - 0.10 K/µL", "flag": ""},
-      {"item": "Platelets", "resultado": "187", "referencia": "148 - 484 K/µL", "flag": ""},
-      {"item": "PDW", "resultado": "15.1", "referencia": "9.1 - 19.4 fL", "flag": ""},
-      {"item": "MPV", "resultado": "14.0", "referencia": "8.7 - 13.2 fL", "flag": "H"}
+      {
+        "item": "RBC",
+        "resultado": "7.81",
+        "referencia": "5.65 - 8.87 M/µL",
+        "flag": ""
+      },
+      {
+        "item": "Hematocrit",
+        "resultado": "53.0",
+        "referencia": "37.3 - 61.7 %",
+        "flag": ""
+      },
+      {
+        "item": "Hemoglobin",
+        "resultado": "17.7",
+        "referencia": "13.1 - 20.5 g/dL",
+        "flag": ""
+      },
+      {
+        "item": "MCV",
+        "resultado": "67.9",
+        "referencia": "61.6 - 73.5 fL",
+        "flag": ""
+      },
+      {
+        "item": "MCH",
+        "resultado": "22.7",
+        "referencia": "21.2 - 25.9 pg",
+        "flag": ""
+      },
+      {
+        "item": "MCHC",
+        "resultado": "33.4",
+        "referencia": "32.0 - 37.9 g/dL",
+        "flag": ""
+      },
+      {
+        "item": "RDW",
+        "resultado": "15.6",
+        "referencia": "13.6 - 21.7 %",
+        "flag": ""
+      },
+      {
+        "item": "% Reticulocytes",
+        "resultado": "1.7",
+        "referencia": "%",
+        "flag": ""
+      },
+      {
+        "item": "Reticulocytes",
+        "resultado": "129.6",
+        "referencia": "10.0 - 110.0 K/µL",
+        "flag": "H"
+      },
+      {
+        "item": "Reticulocyte Hemoglobin",
+        "resultado": "26.0",
+        "referencia": "22.3 - 29.6 pg",
+        "flag": ""
+      },
+      {
+        "item": "WBC",
+        "resultado": "10.28",
+        "referencia": "5.05 - 16.76 K/µL",
+        "flag": ""
+      },
+      {
+        "item": "% Neutrophils",
+        "resultado": "35.4",
+        "referencia": "%",
+        "flag": ""
+      },
+      {
+        "item": "% Lymphocytes",
+        "resultado": "59.7",
+        "referencia": "%",
+        "flag": ""
+      },
+      {
+        "item": "% Monocytes",
+        "resultado": "3.8",
+        "referencia": "%",
+        "flag": ""
+      },
+      {
+        "item": "% Eosinophils",
+        "resultado": "1.0",
+        "referencia": "%",
+        "flag": ""
+      },
+      {
+        "item": "% Basophils",
+        "resultado": "0.1",
+        "referencia": "%",
+        "flag": ""
+      },
+      {
+        "item": "Neutrophils",
+        "resultado": "3.64",
+        "referencia": "2.95 - 11.64 K/µL",
+        "flag": ""
+      },
+      {
+        "item": "Lymphocytes",
+        "resultado": "6.14",
+        "referencia": "1.05 - 5.10 K/µL",
+        "flag": "H"
+      },
+      {
+        "item": "Monocytes",
+        "resultado": "0.39",
+        "referencia": "0.16 - 1.12 K/µL",
+        "flag": ""
+      },
+      {
+        "item": "Eosinophils",
+        "resultado": "0.10",
+        "referencia": "0.06 - 1.23 K/µL",
+        "flag": ""
+      },
+      {
+        "item": "Basophils",
+        "resultado": "0.01",
+        "referencia": "0.00 - 0.10 K/µL",
+        "flag": ""
+      },
+      {
+        "item": "Platelets",
+        "resultado": "187",
+        "referencia": "148 - 484 K/µL",
+        "flag": ""
+      },
+      {
+        "item": "PDW",
+        "resultado": "15.1",
+        "referencia": "9.1 - 19.4 fL",
+        "flag": ""
+      },
+      {
+        "item": "MPV",
+        "resultado": "14.0",
+        "referencia": "8.7 - 13.2 fL",
+        "flag": "H"
+      }
     ]
   },
   "LUKI-CORRALES-2026-05-14-1724.pdf": {
     "rows": [
-      {"item": "RBC", "resultado": "5.45", "referencia": "5.65 - 8.87 M/µL", "flag": "L"},
-      {"item": "Hematocrit", "resultado": "32.3", "referencia": "37.3 - 61.7 %", "flag": "L"},
-      {"item": "Hemoglobin", "resultado": "10.9", "referencia": "13.1 - 20.5 g/dL", "flag": "L"},
-      {"item": "MCV", "resultado": "59.3", "referencia": "61.6 - 73.5 fL", "flag": "L"},
-      {"item": "MCH", "resultado": "20.0", "referencia": "21.2 - 25.9 pg", "flag": "L"},
-      {"item": "MCHC", "resultado": "33.7", "referencia": "32.0 - 37.9 g/dL", "flag": ""},
-      {"item": "RDW", "resultado": "19.4", "referencia": "13.6 - 21.7 %", "flag": ""},
-      {"item": "% Reticulocytes", "resultado": "0.8", "referencia": "%", "flag": ""},
-      {"item": "Reticulocytes", "resultado": "40.9", "referencia": "10.0 - 110.0 K/µL", "flag": ""},
-      {"item": "Reticulocyte Hemoglobin", "resultado": "23.2", "referencia": "22.3 - 29.6 pg", "flag": ""},
-      {"item": "WBC", "resultado": "12.34", "referencia": "5.05 - 16.76 K/µL", "flag": ""},
-      {"item": "% Neutrophils", "resultado": "76.4", "referencia": "%", "flag": ""},
-      {"item": "% Lymphocytes", "resultado": "12.6", "referencia": "%", "flag": ""},
-      {"item": "% Monocytes", "resultado": "8.2", "referencia": "%", "flag": ""},
-      {"item": "% Eosinophils", "resultado": "2.8", "referencia": "%", "flag": ""},
-      {"item": "% Basophils", "resultado": "0.0", "referencia": "%", "flag": ""},
-      {"item": "Neutrophils", "resultado": "9.44", "referencia": "2.95 - 11.64 K/µL", "flag": ""},
-      {"item": "Lymphocytes", "resultado": "1.55", "referencia": "1.05 - 5.10 K/µL", "flag": ""},
-      {"item": "Monocytes", "resultado": "1.01", "referencia": "0.16 - 1.12 K/µL", "flag": ""},
-      {"item": "Eosinophils", "resultado": "0.34", "referencia": "0.06 - 1.23 K/µL", "flag": ""},
-      {"item": "Basophils", "resultado": "0.00", "referencia": "0.00 - 0.10 K/µL", "flag": ""},
-      {"item": "Platelets", "resultado": "148", "referencia": "148 - 484 K/µL", "flag": "L"},
-      {"item": "PDW", "resultado": "9.1", "referencia": "9.1 - 19.4 fL", "flag": ""},
-      {"item": "MPV", "resultado": "17.1", "referencia": "8.7 - 13.2 fL", "flag": "H"}
+      {
+        "item": "RBC",
+        "resultado": "5.45",
+        "referencia": "5.65 - 8.87 M/µL",
+        "flag": "L"
+      },
+      {
+        "item": "Hematocrit",
+        "resultado": "32.3",
+        "referencia": "37.3 - 61.7 %",
+        "flag": "L"
+      },
+      {
+        "item": "Hemoglobin",
+        "resultado": "10.9",
+        "referencia": "13.1 - 20.5 g/dL",
+        "flag": "L"
+      },
+      {
+        "item": "MCV",
+        "resultado": "59.3",
+        "referencia": "61.6 - 73.5 fL",
+        "flag": "L"
+      },
+      {
+        "item": "MCH",
+        "resultado": "20.0",
+        "referencia": "21.2 - 25.9 pg",
+        "flag": "L"
+      },
+      {
+        "item": "MCHC",
+        "resultado": "33.7",
+        "referencia": "32.0 - 37.9 g/dL",
+        "flag": ""
+      },
+      {
+        "item": "RDW",
+        "resultado": "19.4",
+        "referencia": "13.6 - 21.7 %",
+        "flag": ""
+      },
+      {
+        "item": "% Reticulocytes",
+        "resultado": "0.8",
+        "referencia": "%",
+        "flag": ""
+      },
+      {
+        "item": "Reticulocytes",
+        "resultado": "40.9",
+        "referencia": "10.0 - 110.0 K/µL",
+        "flag": ""
+      },
+      {
+        "item": "Reticulocyte Hemoglobin",
+        "resultado": "23.2",
+        "referencia": "22.3 - 29.6 pg",
+        "flag": ""
+      },
+      {
+        "item": "WBC",
+        "resultado": "12.34",
+        "referencia": "5.05 - 16.76 K/µL",
+        "flag": ""
+      },
+      {
+        "item": "% Neutrophils",
+        "resultado": "76.4",
+        "referencia": "%",
+        "flag": ""
+      },
+      {
+        "item": "% Lymphocytes",
+        "resultado": "12.6",
+        "referencia": "%",
+        "flag": ""
+      },
+      {
+        "item": "% Monocytes",
+        "resultado": "8.2",
+        "referencia": "%",
+        "flag": ""
+      },
+      {
+        "item": "% Eosinophils",
+        "resultado": "2.8",
+        "referencia": "%",
+        "flag": ""
+      },
+      {
+        "item": "% Basophils",
+        "resultado": "0.0",
+        "referencia": "%",
+        "flag": ""
+      },
+      {
+        "item": "Neutrophils",
+        "resultado": "9.44",
+        "referencia": "2.95 - 11.64 K/µL",
+        "flag": ""
+      },
+      {
+        "item": "Lymphocytes",
+        "resultado": "1.55",
+        "referencia": "1.05 - 5.10 K/µL",
+        "flag": ""
+      },
+      {
+        "item": "Monocytes",
+        "resultado": "1.01",
+        "referencia": "0.16 - 1.12 K/µL",
+        "flag": ""
+      },
+      {
+        "item": "Eosinophils",
+        "resultado": "0.34",
+        "referencia": "0.06 - 1.23 K/µL",
+        "flag": ""
+      },
+      {
+        "item": "Basophils",
+        "resultado": "0.00",
+        "referencia": "0.00 - 0.10 K/µL",
+        "flag": ""
+      },
+      {
+        "item": "Platelets",
+        "resultado": "148",
+        "referencia": "148 - 484 K/µL",
+        "flag": "L"
+      },
+      {
+        "item": "PDW",
+        "resultado": "9.1",
+        "referencia": "9.1 - 19.4 fL",
+        "flag": ""
+      },
+      {
+        "item": "MPV",
+        "resultado": "17.1",
+        "referencia": "8.7 - 13.2 fL",
+        "flag": "H"
+      }
     ]
   },
   "ZEUS-CABRERA-2026-05-24-1035.pdf": {
     "rows": [
-      {"item": "RBC", "resultado": "6.52", "referencia": "5.65 - 8.87 M/µL", "flag": ""},
-      {"item": "Hematocrit", "resultado": "42.4", "referencia": "37.3 - 61.7 %", "flag": ""},
-      {"item": "Hemoglobin", "resultado": "14.5", "referencia": "13.1 - 20.5 g/dL", "flag": ""},
-      {"item": "MCV", "resultado": "65.0", "referencia": "61.6 - 73.5 fL", "flag": ""},
-      {"item": "MCH", "resultado": "22.2", "referencia": "21.2 - 25.9 pg", "flag": ""},
-      {"item": "MCHC", "resultado": "34.2", "referencia": "32.0 - 37.9 g/dL", "flag": ""},
-      {"item": "RDW", "resultado": "16.5", "referencia": "13.6 - 21.7 %", "flag": ""},
-      {"item": "% Reticulocytes", "resultado": "0.7", "referencia": "%", "flag": ""},
-      {"item": "Reticulocytes", "resultado": "46.3", "referencia": "10.0 - 110.0 K/µL", "flag": ""},
-      {"item": "Reticulocyte Hemoglobin", "resultado": "24.0", "referencia": "22.3 - 29.6 pg", "flag": ""},
-      {"item": "WBC", "resultado": "9.67", "referencia": "5.05 - 16.76 K/µL", "flag": ""},
-      {"item": "% Neutrophils", "resultado": "79.4", "referencia": "%", "flag": ""},
-      {"item": "% Lymphocytes", "resultado": "9.3", "referencia": "%", "flag": ""},
-      {"item": "% Monocytes", "resultado": "3.1", "referencia": "%", "flag": ""},
-      {"item": "% Eosinophils", "resultado": "7.3", "referencia": "%", "flag": ""},
-      {"item": "% Basophils", "resultado": "0.9", "referencia": "%", "flag": ""},
-      {"item": "Neutrophils", "resultado": "7.67", "referencia": "2.95 - 11.64 K/µL", "flag": ""},
-      {"item": "Lymphocytes", "resultado": "0.90", "referencia": "1.05 - 5.10 K/µL", "flag": "L"},
-      {"item": "Monocytes", "resultado": "0.30", "referencia": "0.16 - 1.12 K/µL", "flag": ""},
-      {"item": "Eosinophils", "resultado": "0.71", "referencia": "0.06 - 1.23 K/µL", "flag": ""},
-      {"item": "Basophils", "resultado": "0.09", "referencia": "0.00 - 0.10 K/µL", "flag": ""},
-      {"item": "Platelets", "resultado": "257", "referencia": "148 - 484 K/µL", "flag": ""},
-      {"item": "PDW", "resultado": "14.9", "referencia": "9.1 - 19.4 fL", "flag": ""},
-      {"item": "MPV", "resultado": "14.3", "referencia": "8.7 - 13.2 fL", "flag": "H"}
+      {
+        "item": "RBC",
+        "resultado": "6.52",
+        "referencia": "5.65 - 8.87 M/µL",
+        "flag": ""
+      },
+      {
+        "item": "Hematocrit",
+        "resultado": "42.4",
+        "referencia": "37.3 - 61.7 %",
+        "flag": ""
+      },
+      {
+        "item": "Hemoglobin",
+        "resultado": "14.5",
+        "referencia": "13.1 - 20.5 g/dL",
+        "flag": ""
+      },
+      {
+        "item": "MCV",
+        "resultado": "65.0",
+        "referencia": "61.6 - 73.5 fL",
+        "flag": ""
+      },
+      {
+        "item": "MCH",
+        "resultado": "22.2",
+        "referencia": "21.2 - 25.9 pg",
+        "flag": ""
+      },
+      {
+        "item": "MCHC",
+        "resultado": "34.2",
+        "referencia": "32.0 - 37.9 g/dL",
+        "flag": ""
+      },
+      {
+        "item": "RDW",
+        "resultado": "16.5",
+        "referencia": "13.6 - 21.7 %",
+        "flag": ""
+      },
+      {
+        "item": "% Reticulocytes",
+        "resultado": "0.7",
+        "referencia": "%",
+        "flag": ""
+      },
+      {
+        "item": "Reticulocytes",
+        "resultado": "46.3",
+        "referencia": "10.0 - 110.0 K/µL",
+        "flag": ""
+      },
+      {
+        "item": "Reticulocyte Hemoglobin",
+        "resultado": "24.0",
+        "referencia": "22.3 - 29.6 pg",
+        "flag": ""
+      },
+      {
+        "item": "WBC",
+        "resultado": "9.67",
+        "referencia": "5.05 - 16.76 K/µL",
+        "flag": ""
+      },
+      {
+        "item": "% Neutrophils",
+        "resultado": "79.4",
+        "referencia": "%",
+        "flag": ""
+      },
+      {
+        "item": "% Lymphocytes",
+        "resultado": "9.3",
+        "referencia": "%",
+        "flag": ""
+      },
+      {
+        "item": "% Monocytes",
+        "resultado": "3.1",
+        "referencia": "%",
+        "flag": ""
+      },
+      {
+        "item": "% Eosinophils",
+        "resultado": "7.3",
+        "referencia": "%",
+        "flag": ""
+      },
+      {
+        "item": "% Basophils",
+        "resultado": "0.9",
+        "referencia": "%",
+        "flag": ""
+      },
+      {
+        "item": "Neutrophils",
+        "resultado": "7.67",
+        "referencia": "2.95 - 11.64 K/µL",
+        "flag": ""
+      },
+      {
+        "item": "Lymphocytes",
+        "resultado": "0.90",
+        "referencia": "1.05 - 5.10 K/µL",
+        "flag": "L"
+      },
+      {
+        "item": "Monocytes",
+        "resultado": "0.30",
+        "referencia": "0.16 - 1.12 K/µL",
+        "flag": ""
+      },
+      {
+        "item": "Eosinophils",
+        "resultado": "0.71",
+        "referencia": "0.06 - 1.23 K/µL",
+        "flag": ""
+      },
+      {
+        "item": "Basophils",
+        "resultado": "0.09",
+        "referencia": "0.00 - 0.10 K/µL",
+        "flag": ""
+      },
+      {
+        "item": "Platelets",
+        "resultado": "257",
+        "referencia": "148 - 484 K/µL",
+        "flag": ""
+      },
+      {
+        "item": "PDW",
+        "resultado": "14.9",
+        "referencia": "9.1 - 19.4 fL",
+        "flag": ""
+      },
+      {
+        "item": "MPV",
+        "resultado": "14.3",
+        "referencia": "8.7 - 13.2 fL",
+        "flag": "H"
+      }
     ]
   },
   "23a07b2e-ec35-4d85-8599-9b9df839f9ec.jpg": {
     "rows": [
-      {"item": "WBC", "resultado": "9.42 10^9/L", "referencia": "6-17", "flag": ""},
-      {"item": "LYM#", "resultado": "7.71 10^9/L", "referencia": "0.8-5.1", "flag": "H"},
-      {"item": "MID#", "resultado": "0.51 10^9/L", "referencia": "0-1.8", "flag": ""},
-      {"item": "GRA#", "resultado": "1.2 10^9/L", "referencia": "4-12.6", "flag": "L"},
-      {"item": "LYM%", "resultado": "81.9 %", "referencia": "12-30", "flag": "H"},
-      {"item": "MID%", "resultado": "5.4 %", "referencia": "2-9", "flag": ""},
-      {"item": "GRA%", "resultado": "12.7 %", "referencia": "60-83", "flag": "L"},
-      {"item": "RBC", "resultado": "4.8 10^12/L", "referencia": "5.5-8.5", "flag": "L"},
-      {"item": "HGB", "resultado": "9.4 g/dL", "referencia": "11-19", "flag": "L"},
-      {"item": "MCHC", "resultado": "28.6 g/dL", "referencia": "30-38", "flag": "L"},
-      {"item": "MCH", "resultado": "19.5 pg", "referencia": "20-25", "flag": "L"},
-      {"item": "MCV", "resultado": "68.2 fL", "referencia": "62-72", "flag": ""},
-      {"item": "RDW-CV", "resultado": "13.2 %", "referencia": "11-15.5", "flag": ""},
-      {"item": "RDW-SD", "resultado": "43.6 fL", "referencia": "35-56", "flag": ""},
-      {"item": "HCT", "resultado": "32.7 %", "referencia": "39-56", "flag": "L"},
-      {"item": "PLT", "resultado": "200 10^9/L", "referencia": "200-460", "flag": ""},
-      {"item": "MPV", "resultado": "7.3 fL", "referencia": "7-12.9", "flag": ""},
-      {"item": "PDW", "resultado": "16.3 %", "referencia": "10-18", "flag": ""},
-      {"item": "PCT", "resultado": "0.146 %", "referencia": "0.1-0.5", "flag": ""},
-      {"item": "P-LCR", "resultado": "6.7 %", "referencia": "13-43", "flag": "L"}
+      {
+        "item": "WBC",
+        "resultado": "9.42 10^9/L",
+        "referencia": "6-17",
+        "flag": ""
+      },
+      {
+        "item": "LYM#",
+        "resultado": "7.71 10^9/L",
+        "referencia": "0.8-5.1",
+        "flag": "H"
+      },
+      {
+        "item": "MID#",
+        "resultado": "0.51 10^9/L",
+        "referencia": "0-1.8",
+        "flag": ""
+      },
+      {
+        "item": "GRA#",
+        "resultado": "1.2 10^9/L",
+        "referencia": "4-12.6",
+        "flag": "L"
+      },
+      {
+        "item": "LYM%",
+        "resultado": "81.9 %",
+        "referencia": "12-30",
+        "flag": "H"
+      },
+      {
+        "item": "MID%",
+        "resultado": "5.4 %",
+        "referencia": "2-9",
+        "flag": ""
+      },
+      {
+        "item": "GRA%",
+        "resultado": "12.7 %",
+        "referencia": "60-83",
+        "flag": "L"
+      },
+      {
+        "item": "RBC",
+        "resultado": "4.8 10^12/L",
+        "referencia": "5.5-8.5",
+        "flag": "L"
+      },
+      {
+        "item": "HGB",
+        "resultado": "9.4 g/dL",
+        "referencia": "11-19",
+        "flag": "L"
+      },
+      {
+        "item": "MCHC",
+        "resultado": "28.6 g/dL",
+        "referencia": "30-38",
+        "flag": "L"
+      },
+      {
+        "item": "MCH",
+        "resultado": "19.5 pg",
+        "referencia": "20-25",
+        "flag": "L"
+      },
+      {
+        "item": "MCV",
+        "resultado": "68.2 fL",
+        "referencia": "62-72",
+        "flag": ""
+      },
+      {
+        "item": "RDW-CV",
+        "resultado": "13.2 %",
+        "referencia": "11-15.5",
+        "flag": ""
+      },
+      {
+        "item": "RDW-SD",
+        "resultado": "43.6 fL",
+        "referencia": "35-56",
+        "flag": ""
+      },
+      {
+        "item": "HCT",
+        "resultado": "32.7 %",
+        "referencia": "39-56",
+        "flag": "L"
+      },
+      {
+        "item": "PLT",
+        "resultado": "200 10^9/L",
+        "referencia": "200-460",
+        "flag": ""
+      },
+      {
+        "item": "MPV",
+        "resultado": "7.3 fL",
+        "referencia": "7-12.9",
+        "flag": ""
+      },
+      {
+        "item": "PDW",
+        "resultado": "16.3 %",
+        "referencia": "10-18",
+        "flag": ""
+      },
+      {
+        "item": "PCT",
+        "resultado": "0.146 %",
+        "referencia": "0.1-0.5",
+        "flag": ""
+      },
+      {
+        "item": "P-LCR",
+        "resultado": "6.7 %",
+        "referencia": "13-43",
+        "flag": "L"
+      }
     ]
   },
   "5ce50946-7def-4e60-8063-9a8bc6de3cd6.png": {
     "rows": [
-      {"item": "WBC", "resultado": "8.65 10^9/L", "referencia": "5-19.5", "flag": ""},
-      {"item": "LYM#", "resultado": "5.20 10^9/L", "referencia": "1.5-7", "flag": "H"},
-      {"item": "MID#", "resultado": "0.38 10^9/L", "referencia": "0.1-1.5", "flag": ""},
-      {"item": "GRA#", "resultado": "3.07 10^9/L", "referencia": "2.5-12.5", "flag": ""},
-      {"item": "LYM%", "resultado": "60.1 %", "referencia": "20-55", "flag": "H"},
-      {"item": "MID%", "resultado": "4.4 %", "referencia": "1-9", "flag": ""},
-      {"item": "GRA%", "resultado": "35.5 %", "referencia": "35-75", "flag": ""},
-      {"item": "RBC", "resultado": "7.32 10^12/L", "referencia": "5.0-10.0", "flag": ""},
-      {"item": "HGB", "resultado": "11.5 g/dL", "referencia": "8-15", "flag": ""},
-      {"item": "MCHC", "resultado": "33.1 g/dL", "referencia": "30-36", "flag": ""},
-      {"item": "MCH", "resultado": "15.7 pg", "referencia": "13-17", "flag": ""},
-      {"item": "MCV", "resultado": "47.5 fL", "referencia": "39-52", "flag": ""},
-      {"item": "RDW-CV", "resultado": "14.1 %", "referencia": "11-15.5", "flag": ""},
-      {"item": "RDW-SD", "resultado": "43.8 fL", "referencia": "35-56", "flag": ""},
-      {"item": "HCT", "resultado": "34.8 %", "referencia": "24-45", "flag": ""},
-      {"item": "PLT", "resultado": "287 10^9/L", "referencia": "200-500", "flag": ""},
-      {"item": "MPV", "resultado": "9.2 fL", "referencia": "6.5-12", "flag": ""},
-      {"item": "PDW", "resultado": "15.1 %", "referencia": "10-18", "flag": ""},
-      {"item": "PCT", "resultado": "0.263 %", "referencia": "0.1-0.5", "flag": ""},
-      {"item": "P-LCR", "resultado": "19.3 %", "referencia": "13-43", "flag": ""}
+      {
+        "item": "WBC",
+        "resultado": "8.65 10^9/L",
+        "referencia": "5-19.5",
+        "flag": ""
+      },
+      {
+        "item": "LYM#",
+        "resultado": "5.20 10^9/L",
+        "referencia": "1.5-7",
+        "flag": "H"
+      },
+      {
+        "item": "MID#",
+        "resultado": "0.38 10^9/L",
+        "referencia": "0.1-1.5",
+        "flag": ""
+      },
+      {
+        "item": "GRA#",
+        "resultado": "3.07 10^9/L",
+        "referencia": "2.5-12.5",
+        "flag": ""
+      },
+      {
+        "item": "LYM%",
+        "resultado": "60.1 %",
+        "referencia": "20-55",
+        "flag": "H"
+      },
+      {
+        "item": "MID%",
+        "resultado": "4.4 %",
+        "referencia": "1-9",
+        "flag": ""
+      },
+      {
+        "item": "GRA%",
+        "resultado": "35.5 %",
+        "referencia": "35-75",
+        "flag": ""
+      },
+      {
+        "item": "RBC",
+        "resultado": "7.32 10^12/L",
+        "referencia": "5.0-10.0",
+        "flag": ""
+      },
+      {
+        "item": "HGB",
+        "resultado": "11.5 g/dL",
+        "referencia": "8-15",
+        "flag": ""
+      },
+      {
+        "item": "MCHC",
+        "resultado": "33.1 g/dL",
+        "referencia": "30-36",
+        "flag": ""
+      },
+      {
+        "item": "MCH",
+        "resultado": "15.7 pg",
+        "referencia": "13-17",
+        "flag": ""
+      },
+      {
+        "item": "MCV",
+        "resultado": "47.5 fL",
+        "referencia": "39-52",
+        "flag": ""
+      },
+      {
+        "item": "RDW-CV",
+        "resultado": "14.1 %",
+        "referencia": "11-15.5",
+        "flag": ""
+      },
+      {
+        "item": "RDW-SD",
+        "resultado": "43.8 fL",
+        "referencia": "35-56",
+        "flag": ""
+      },
+      {
+        "item": "HCT",
+        "resultado": "34.8 %",
+        "referencia": "24-45",
+        "flag": ""
+      },
+      {
+        "item": "PLT",
+        "resultado": "287 10^9/L",
+        "referencia": "200-500",
+        "flag": ""
+      },
+      {
+        "item": "MPV",
+        "resultado": "9.2 fL",
+        "referencia": "6.5-12",
+        "flag": ""
+      },
+      {
+        "item": "PDW",
+        "resultado": "15.1 %",
+        "referencia": "10-18",
+        "flag": ""
+      },
+      {
+        "item": "PCT",
+        "resultado": "0.263 %",
+        "referencia": "0.1-0.5",
+        "flag": ""
+      },
+      {
+        "item": "P-LCR",
+        "resultado": "19.3 %",
+        "referencia": "13-43",
+        "flag": ""
+      }
     ]
   },
   "a76eab4a-1ddb-4f3d-8aa7-b308f38090dc.jpg": {
     "rows": [
-      {"item": "WBC", "resultado": "17.15 10^9/L", "referencia": "6-17", "flag": "H"},
-      {"item": "LYM#", "resultado": "13.24 10^9/L", "referencia": "0.8-5.1", "flag": "H"},
-      {"item": "MID#", "resultado": "1.27 10^9/L", "referencia": "0-1.8", "flag": ""},
-      {"item": "GRA#", "resultado": "2.64 10^9/L", "referencia": "4-12.6", "flag": "L"},
-      {"item": "LYM%", "resultado": "77.2 %", "referencia": "12-30", "flag": "H"},
-      {"item": "MID%", "resultado": "7.4 %", "referencia": "2-9", "flag": ""},
-      {"item": "GRA%", "resultado": "15.4 %", "referencia": "60-83", "flag": "L"},
-      {"item": "RBC", "resultado": "5.05 10^12/L", "referencia": "5.5-8.5", "flag": "L"},
-      {"item": "HGB", "resultado": "9.4 g/dL", "referencia": "11-19", "flag": "L"},
-      {"item": "MCHC", "resultado": "27.8 g/dL", "referencia": "30-38", "flag": "L"},
-      {"item": "MCH", "resultado": "18.7 pg", "referencia": "20-25", "flag": "L"},
-      {"item": "MCV", "resultado": "67.3 fL", "referencia": "62-72", "flag": ""},
-      {"item": "RDW-CV", "resultado": "12.5 %", "referencia": "11-15.5", "flag": ""},
-      {"item": "RDW-SD", "resultado": "40.7 fL", "referencia": "35-56", "flag": ""},
-      {"item": "HCT", "resultado": "34 %", "referencia": "39-56", "flag": "L"},
-      {"item": "PLT", "resultado": "168 10^9/L", "referencia": "200-460", "flag": "L"},
-      {"item": "MPV", "resultado": "8.7 fL", "referencia": "7-12.9", "flag": ""},
-      {"item": "PDW", "resultado": "20.2 %", "referencia": "10-18", "flag": "H"},
-      {"item": "PCT", "resultado": "0.146 %", "referencia": "0.1-0.5", "flag": ""},
-      {"item": "P-LCR", "resultado": "8.9 %", "referencia": "13-43", "flag": "L"}
+      {
+        "item": "WBC",
+        "resultado": "17.15 10^9/L",
+        "referencia": "6-17",
+        "flag": "H"
+      },
+      {
+        "item": "LYM#",
+        "resultado": "13.24 10^9/L",
+        "referencia": "0.8-5.1",
+        "flag": "H"
+      },
+      {
+        "item": "MID#",
+        "resultado": "1.27 10^9/L",
+        "referencia": "0-1.8",
+        "flag": ""
+      },
+      {
+        "item": "GRA#",
+        "resultado": "2.64 10^9/L",
+        "referencia": "4-12.6",
+        "flag": "L"
+      },
+      {
+        "item": "LYM%",
+        "resultado": "77.2 %",
+        "referencia": "12-30",
+        "flag": "H"
+      },
+      {
+        "item": "MID%",
+        "resultado": "7.4 %",
+        "referencia": "2-9",
+        "flag": ""
+      },
+      {
+        "item": "GRA%",
+        "resultado": "15.4 %",
+        "referencia": "60-83",
+        "flag": "L"
+      },
+      {
+        "item": "RBC",
+        "resultado": "5.05 10^12/L",
+        "referencia": "5.5-8.5",
+        "flag": "L"
+      },
+      {
+        "item": "HGB",
+        "resultado": "9.4 g/dL",
+        "referencia": "11-19",
+        "flag": "L"
+      },
+      {
+        "item": "MCHC",
+        "resultado": "27.8 g/dL",
+        "referencia": "30-38",
+        "flag": "L"
+      },
+      {
+        "item": "MCH",
+        "resultado": "18.7 pg",
+        "referencia": "20-25",
+        "flag": "L"
+      },
+      {
+        "item": "MCV",
+        "resultado": "67.3 fL",
+        "referencia": "62-72",
+        "flag": ""
+      },
+      {
+        "item": "RDW-CV",
+        "resultado": "12.5 %",
+        "referencia": "11-15.5",
+        "flag": ""
+      },
+      {
+        "item": "RDW-SD",
+        "resultado": "40.7 fL",
+        "referencia": "35-56",
+        "flag": ""
+      },
+      {
+        "item": "HCT",
+        "resultado": "34 %",
+        "referencia": "39-56",
+        "flag": "L"
+      },
+      {
+        "item": "PLT",
+        "resultado": "168 10^9/L",
+        "referencia": "200-460",
+        "flag": "L"
+      },
+      {
+        "item": "MPV",
+        "resultado": "8.7 fL",
+        "referencia": "7-12.9",
+        "flag": ""
+      },
+      {
+        "item": "PDW",
+        "resultado": "20.2 %",
+        "referencia": "10-18",
+        "flag": "H"
+      },
+      {
+        "item": "PCT",
+        "resultado": "0.146 %",
+        "referencia": "0.1-0.5",
+        "flag": ""
+      },
+      {
+        "item": "P-LCR",
+        "resultado": "8.9 %",
+        "referencia": "13-43",
+        "flag": "L"
+      }
     ]
   },
   "16823793-d19c-4539-8d5d-196161e1199b.png": {
     "rows": [
-      {"item": "WBC", "resultado": "12.05 10^9/L", "referencia": "6-17", "flag": ""},
-      {"item": "LYM#", "resultado": "3.40 10^9/L", "referencia": "0.8-5.1", "flag": ""},
-      {"item": "MID#", "resultado": "0.80 10^9/L", "referencia": "0-1.8", "flag": ""},
-      {"item": "GRA#", "resultado": "8.65 10^9/L", "referencia": "4-12.6", "flag": ""},
-      {"item": "LYM%", "resultado": "26.5 %", "referencia": "12-30", "flag": ""},
-      {"item": "MID%", "resultado": "6.2 %", "referencia": "2-9", "flag": ""},
-      {"item": "GRA%", "resultado": "67.3 %", "referencia": "60-83", "flag": ""},
-      {"item": "RBC", "resultado": "6.35 10^12/L", "referencia": "5.5-8.5", "flag": ""},
-      {"item": "HGB", "resultado": "14.2 g/dL", "referencia": "11-19", "flag": ""},
-      {"item": "MCHC", "resultado": "32.8 g/dL", "referencia": "30-38", "flag": ""},
-      {"item": "MCH", "resultado": "22.4 pg", "referencia": "20-25", "flag": ""},
-      {"item": "MCV", "resultado": "68.4 fL", "referencia": "62-72", "flag": ""},
-      {"item": "RDW-CV", "resultado": "13.8 %", "referencia": "11-15.5", "flag": ""},
-      {"item": "RDW-SD", "resultado": "38.9 fL", "referencia": "35-56", "flag": ""},
-      {"item": "HCT", "resultado": "43.3 %", "referencia": "39-56", "flag": ""},
-      {"item": "PLT", "resultado": "255 10^9/L", "referencia": "200-460", "flag": ""},
-      {"item": "MPV", "resultado": "8.8 fL", "referencia": "7-12.9", "flag": ""},
-      {"item": "PDW", "resultado": "17.3 %", "referencia": "10-18", "flag": ""},
-      {"item": "PCT", "resultado": "0.224 %", "referencia": "0.1-0.5", "flag": ""},
-      {"item": "P-LCR", "resultado": "12.8 %", "referencia": "13-43", "flag": "L"}
+      {
+        "item": "WBC",
+        "resultado": "12.05 10^9/L",
+        "referencia": "6-17",
+        "flag": ""
+      },
+      {
+        "item": "LYM#",
+        "resultado": "3.40 10^9/L",
+        "referencia": "0.8-5.1",
+        "flag": ""
+      },
+      {
+        "item": "MID#",
+        "resultado": "0.80 10^9/L",
+        "referencia": "0-1.8",
+        "flag": ""
+      },
+      {
+        "item": "GRA#",
+        "resultado": "8.65 10^9/L",
+        "referencia": "4-12.6",
+        "flag": ""
+      },
+      {
+        "item": "LYM%",
+        "resultado": "26.5 %",
+        "referencia": "12-30",
+        "flag": ""
+      },
+      {
+        "item": "MID%",
+        "resultado": "6.2 %",
+        "referencia": "2-9",
+        "flag": ""
+      },
+      {
+        "item": "GRA%",
+        "resultado": "67.3 %",
+        "referencia": "60-83",
+        "flag": ""
+      },
+      {
+        "item": "RBC",
+        "resultado": "6.35 10^12/L",
+        "referencia": "5.5-8.5",
+        "flag": ""
+      },
+      {
+        "item": "HGB",
+        "resultado": "14.2 g/dL",
+        "referencia": "11-19",
+        "flag": ""
+      },
+      {
+        "item": "MCHC",
+        "resultado": "32.8 g/dL",
+        "referencia": "30-38",
+        "flag": ""
+      },
+      {
+        "item": "MCH",
+        "resultado": "22.4 pg",
+        "referencia": "20-25",
+        "flag": ""
+      },
+      {
+        "item": "MCV",
+        "resultado": "68.4 fL",
+        "referencia": "62-72",
+        "flag": ""
+      },
+      {
+        "item": "RDW-CV",
+        "resultado": "13.8 %",
+        "referencia": "11-15.5",
+        "flag": ""
+      },
+      {
+        "item": "RDW-SD",
+        "resultado": "38.9 fL",
+        "referencia": "35-56",
+        "flag": ""
+      },
+      {
+        "item": "HCT",
+        "resultado": "43.3 %",
+        "referencia": "39-56",
+        "flag": ""
+      },
+      {
+        "item": "PLT",
+        "resultado": "255 10^9/L",
+        "referencia": "200-460",
+        "flag": ""
+      },
+      {
+        "item": "MPV",
+        "resultado": "8.8 fL",
+        "referencia": "7-12.9",
+        "flag": ""
+      },
+      {
+        "item": "PDW",
+        "resultado": "17.3 %",
+        "referencia": "10-18",
+        "flag": ""
+      },
+      {
+        "item": "PCT",
+        "resultado": "0.224 %",
+        "referencia": "0.1-0.5",
+        "flag": ""
+      },
+      {
+        "item": "P-LCR",
+        "resultado": "12.8 %",
+        "referencia": "13-43",
+        "flag": "L"
+      }
     ]
   },
   "5e39366e-9269-4181-98ea-9f6e4987312b.png": {
     "rows": [
-      {"item": "WBC", "resultado": "11.23 10^9/L", "referencia": "6-17", "flag": ""},
-      {"item": "LYM#", "resultado": "2.18 10^9/L", "referencia": "0.8-5.1", "flag": ""},
-      {"item": "MID#", "resultado": "0.65 10^9/L", "referencia": "0-1.8", "flag": ""},
-      {"item": "GRA#", "resultado": "8.40 10^9/L", "referencia": "4-12.6", "flag": ""},
-      {"item": "LYM%", "resultado": "19.4 %", "referencia": "12-30", "flag": ""},
-      {"item": "MID%", "resultado": "5.8 %", "referencia": "2-9", "flag": ""},
-      {"item": "GRA%", "resultado": "74.8 %", "referencia": "60-83", "flag": "H"},
-      {"item": "RBC", "resultado": "6.82 10^12/L", "referencia": "5.5-8.5", "flag": ""},
-      {"item": "HGB", "resultado": "15.2 g/dL", "referencia": "11-19", "flag": ""},
-      {"item": "MCHC", "resultado": "33.6 g/dL", "referencia": "30-38", "flag": ""},
-      {"item": "MCH", "resultado": "22.3 pg", "referencia": "20-25", "flag": ""},
-      {"item": "MCV", "resultado": "66.4 fL", "referencia": "62-72", "flag": ""},
-      {"item": "RDW-CV", "resultado": "13.6 %", "referencia": "11-15.5", "flag": ""},
-      {"item": "RDW-SD", "resultado": "40.2 fL", "referencia": "35-56", "flag": ""},
-      {"item": "HCT", "resultado": "45.2 %", "referencia": "39-56", "flag": ""},
-      {"item": "PLT", "resultado": "234 10^9/L", "referencia": "200-500", "flag": ""},
-      {"item": "MPV", "resultado": "9.1 fL", "referencia": "7-12.9", "flag": ""},
-      {"item": "PDW", "resultado": "15.6 %", "referencia": "10-18", "flag": ""},
-      {"item": "PCT", "resultado": "0.213 %", "referencia": "0.1-0.5", "flag": ""},
-      {"item": "P-LCR", "resultado": "12.6 %", "referencia": "13-43", "flag": ""}
+      {
+        "item": "WBC",
+        "resultado": "11.23 10^9/L",
+        "referencia": "6-17",
+        "flag": ""
+      },
+      {
+        "item": "LYM#",
+        "resultado": "2.18 10^9/L",
+        "referencia": "0.8-5.1",
+        "flag": ""
+      },
+      {
+        "item": "MID#",
+        "resultado": "0.65 10^9/L",
+        "referencia": "0-1.8",
+        "flag": ""
+      },
+      {
+        "item": "GRA#",
+        "resultado": "8.40 10^9/L",
+        "referencia": "4-12.6",
+        "flag": ""
+      },
+      {
+        "item": "LYM%",
+        "resultado": "19.4 %",
+        "referencia": "12-30",
+        "flag": ""
+      },
+      {
+        "item": "MID%",
+        "resultado": "5.8 %",
+        "referencia": "2-9",
+        "flag": ""
+      },
+      {
+        "item": "GRA%",
+        "resultado": "74.8 %",
+        "referencia": "60-83",
+        "flag": "H"
+      },
+      {
+        "item": "RBC",
+        "resultado": "6.82 10^12/L",
+        "referencia": "5.5-8.5",
+        "flag": ""
+      },
+      {
+        "item": "HGB",
+        "resultado": "15.2 g/dL",
+        "referencia": "11-19",
+        "flag": ""
+      },
+      {
+        "item": "MCHC",
+        "resultado": "33.6 g/dL",
+        "referencia": "30-38",
+        "flag": ""
+      },
+      {
+        "item": "MCH",
+        "resultado": "22.3 pg",
+        "referencia": "20-25",
+        "flag": ""
+      },
+      {
+        "item": "MCV",
+        "resultado": "66.4 fL",
+        "referencia": "62-72",
+        "flag": ""
+      },
+      {
+        "item": "RDW-CV",
+        "resultado": "13.6 %",
+        "referencia": "11-15.5",
+        "flag": ""
+      },
+      {
+        "item": "RDW-SD",
+        "resultado": "40.2 fL",
+        "referencia": "35-56",
+        "flag": ""
+      },
+      {
+        "item": "HCT",
+        "resultado": "45.2 %",
+        "referencia": "39-56",
+        "flag": ""
+      },
+      {
+        "item": "PLT",
+        "resultado": "234 10^9/L",
+        "referencia": "200-500",
+        "flag": ""
+      },
+      {
+        "item": "MPV",
+        "resultado": "9.1 fL",
+        "referencia": "7-12.9",
+        "flag": ""
+      },
+      {
+        "item": "PDW",
+        "resultado": "15.6 %",
+        "referencia": "10-18",
+        "flag": ""
+      },
+      {
+        "item": "PCT",
+        "resultado": "0.213 %",
+        "referencia": "0.1-0.5",
+        "flag": ""
+      },
+      {
+        "item": "P-LCR",
+        "resultado": "12.6 %",
+        "referencia": "13-43",
+        "flag": ""
+      }
+    ]
+  },
+  "aaaa8592-ff9a-439a-83a4-8153aa0f2310.png": {
+    "rows": [
+      {
+        "item": "WBC",
+        "resultado": "11.28 10^9/L",
+        "referencia": "6-17",
+        "flag": ""
+      },
+      {
+        "item": "LYM#",
+        "resultado": "3.65 10^9/L",
+        "referencia": "1.0-4.8",
+        "flag": ""
+      },
+      {
+        "item": "MID#",
+        "resultado": "0.88 10^9/L",
+        "referencia": "0-1.8",
+        "flag": ""
+      },
+      {
+        "item": "GRA#",
+        "resultado": "6.75 10^9/L",
+        "referencia": "4-12.6",
+        "flag": ""
+      },
+      {
+        "item": "LYM%",
+        "resultado": "32.4 %",
+        "referencia": "12-30",
+        "flag": "H"
+      },
+      {
+        "item": "MID%",
+        "resultado": "7.8 %",
+        "referencia": "2-9",
+        "flag": ""
+      },
+      {
+        "item": "GRA%",
+        "resultado": "59.8 %",
+        "referencia": "60-83",
+        "flag": "L"
+      },
+      {
+        "item": "RBC",
+        "resultado": "7.25 10^12/L",
+        "referencia": "5.5-8.5",
+        "flag": ""
+      },
+      {
+        "item": "HGB",
+        "resultado": "15.6 g/dL",
+        "referencia": "11-19",
+        "flag": ""
+      },
+      {
+        "item": "MCHC",
+        "resultado": "34.1 g/dL",
+        "referencia": "30-38",
+        "flag": ""
+      },
+      {
+        "item": "MCH",
+        "resultado": "21.5 pg",
+        "referencia": "20-25",
+        "flag": ""
+      },
+      {
+        "item": "MCV",
+        "resultado": "63.1 fL",
+        "referencia": "62-72",
+        "flag": ""
+      },
+      {
+        "item": "RDW-CV",
+        "resultado": "14.0 %",
+        "referencia": "11-15.5",
+        "flag": ""
+      },
+      {
+        "item": "RDW-SD",
+        "resultado": "41.8 fL",
+        "referencia": "35-56",
+        "flag": ""
+      },
+      {
+        "item": "HCT",
+        "resultado": "45.7 %",
+        "referencia": "39-56",
+        "flag": ""
+      },
+      {
+        "item": "PLT",
+        "resultado": "278 10^9/L",
+        "referencia": "200-460",
+        "flag": ""
+      },
+      {
+        "item": "MPV",
+        "resultado": "9.6 fL",
+        "referencia": "7-12.9",
+        "flag": ""
+      },
+      {
+        "item": "PDW",
+        "resultado": "15.1 %",
+        "referencia": "10-18",
+        "flag": ""
+      },
+      {
+        "item": "PCT",
+        "resultado": "0.266 %",
+        "referencia": "0.1-0.5",
+        "flag": ""
+      },
+      {
+        "item": "P-LCR",
+        "resultado": "17.3 %",
+        "referencia": "13-43",
+        "flag": ""
+      }
+    ]
+  },
+  "b3403d54-7fc4-414c-9eb0-0058886202d5.png": {
+    "rows": [
+      {
+        "item": "WBC",
+        "resultado": "7.32 10^9/L",
+        "referencia": "5-15",
+        "flag": ""
+      },
+      {
+        "item": "LYM#",
+        "resultado": "2.18 10^9/L",
+        "referencia": "1.0-4.8",
+        "flag": ""
+      },
+      {
+        "item": "MID#",
+        "resultado": "0.54 10^9/L",
+        "referencia": "0-1.5",
+        "flag": ""
+      },
+      {
+        "item": "GRA#",
+        "resultado": "4.60 10^9/L",
+        "referencia": "2.5-10.5",
+        "flag": ""
+      },
+      {
+        "item": "LYM%",
+        "resultado": "29.8 %",
+        "referencia": "20-50",
+        "flag": "L"
+      },
+      {
+        "item": "MID%",
+        "resultado": "7.4 %",
+        "referencia": "2-9",
+        "flag": ""
+      },
+      {
+        "item": "GRA%",
+        "resultado": "62.8 %",
+        "referencia": "40-75",
+        "flag": "H"
+      },
+      {
+        "item": "RBC",
+        "resultado": "5.93 10^12/L",
+        "referencia": "5.0-8.0",
+        "flag": ""
+      },
+      {
+        "item": "HGB",
+        "resultado": "12.8 g/dL",
+        "referencia": "11-17",
+        "flag": ""
+      },
+      {
+        "item": "MCHC",
+        "resultado": "31.6 g/dL",
+        "referencia": "30-36",
+        "flag": ""
+      },
+      {
+        "item": "MCH",
+        "resultado": "21.6 pg",
+        "referencia": "18-26",
+        "flag": "L"
+      },
+      {
+        "item": "MCV",
+        "resultado": "68.9 fL",
+        "referencia": "60-75",
+        "flag": ""
+      },
+      {
+        "item": "RDW-CV",
+        "resultado": "13.6 %",
+        "referencia": "11-15.5",
+        "flag": ""
+      },
+      {
+        "item": "RDW-SD",
+        "resultado": "41.7 fL",
+        "referencia": "35-56",
+        "flag": ""
+      },
+      {
+        "item": "HCT",
+        "resultado": "40.8 %",
+        "referencia": "34-50",
+        "flag": ""
+      },
+      {
+        "item": "PLT",
+        "resultado": "285 10^9/L",
+        "referencia": "200-500",
+        "flag": ""
+      },
+      {
+        "item": "MPV",
+        "resultado": "9.2 fL",
+        "referencia": "7-12.9",
+        "flag": ""
+      },
+      {
+        "item": "PDW",
+        "resultado": "15.7 %",
+        "referencia": "10-18",
+        "flag": ""
+      },
+      {
+        "item": "PCT",
+        "resultado": "0.263 %",
+        "referencia": "0.1-0.5",
+        "flag": ""
+      },
+      {
+        "item": "P-LCR",
+        "resultado": "15.8 %",
+        "referencia": "13-43",
+        "flag": ""
+      }
     ]
   }
 }

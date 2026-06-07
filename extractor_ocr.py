@@ -2,7 +2,7 @@ import easyocr
 import numpy as np
 import pandas as pd
 from config import OCR_IDIOMAS, OCR_GPU, OCR_CONFIANZA_MINIMA, COLUMNAS
-from corrector import corregir_item, corregir_resultado, corregir_referencia
+from corrector import corregir_item, corregir_resultado, corregir_referencia, separar_resultado_referencia
 from preprocesador import preprocesar_imagen
 import cv2
 
@@ -123,6 +123,10 @@ def _mapear_filas(filas, zonas):
             break
 
     datos = []
+    lym_count = 0
+    mid_count = 0
+    gra_count = 0
+
     for idx, fila in enumerate(filas):
         if idx <= header_indice:
             continue
@@ -134,8 +138,32 @@ def _mapear_filas(filas, zonas):
                     break
         fila_dict = {col: " ".join(palabras_col[col]).strip() for col in nombres_cols}
         if fila_dict["item"]:
-            fila_dict["item"] = corregir_item(fila_dict["item"])
+            item_raw = fila_dict["item"]
+            item_clean = corregir_item(item_raw)
+            if (not item_clean or item_clean == "") and any(x in item_raw.upper() for x in ["ALT", "AIT", "AST"]):
+                ref_raw = fila_dict["referencia"].replace(" ", "").replace(",", ".")
+                if "200" in ref_raw or "500" in ref_raw or "460" in ref_raw:
+                    item_clean = "PLT"
+            
+           
+            item_upper = item_clean.upper()
+            if any(x in item_upper for x in ["LYM", "LYN", "LXM", "LYK", "ZXH", "LY"]):
+                lym_count += 1
+                fila_dict["item"] = "LYM%" if lym_count > 1 else "LYM#"
+            elif any(x in item_upper for x in ["MID", "HID", "NID", "KID", "KLD"]):
+                mid_count += 1
+                fila_dict["item"] = "MID%" if mid_count > 1 else "MID#"
+            elif any(x in item_upper for x in ["GRA", "GRD", "GRT", "GRK", "GR"]):
+                gra_count += 1
+                fila_dict["item"] = "GRA%" if gra_count > 1 else "GRA#"
+            else:
+                fila_dict["item"] = item_clean
+                
             fila_dict["resultado"] = corregir_resultado(fila_dict["resultado"])
             fila_dict["referencia"] = corregir_referencia(fila_dict["referencia"])
+
+            fila_dict["resultado"], fila_dict["referencia"] = separar_resultado_referencia(
+                fila_dict["resultado"], fila_dict["referencia"]
+            )
             datos.append(fila_dict)
     return datos

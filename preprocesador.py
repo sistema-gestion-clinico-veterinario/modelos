@@ -6,12 +6,23 @@ def preprocesar_imagen(ruta_imagen: str) -> np.ndarray:
     imagen = cv2.imread(ruta_imagen)
     if imagen is None:
         raise ValueError(f"No se pudo cargar la imagen: {ruta_imagen}")
+
     gris = cv2.cvtColor(imagen, cv2.COLOR_BGR2GRAY)
+
     angulo = _detectar_angulo(gris)
     if abs(angulo) > 1.5:
         gris = _rotar(gris, angulo)
-    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+
+    h, w = gris.shape
+    if w < 1000:
+        factor = 1000 / w
+        gris = cv2.resize(gris, (int(w * factor), int(h * factor)), interpolation=cv2.INTER_CUBIC)
+
+    clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8, 8))
     gris = clahe.apply(gris)
+
+    gris = cv2.bilateralFilter(gris, 5, 75, 75)
+
     return gris
 
 
