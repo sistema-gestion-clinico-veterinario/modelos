@@ -1,37 +1,37 @@
 import re
 
 CORRECCIONES_ITEM = {
-    "UBC": "WBC", "VBC": "WBC", "HBC": "WBC", "URC": "WBC", "LBC": "WBC", "NBC": "WBC",
+    "UBC": "WBC", "VBC": "WBC", "HBC": "WBC", "URC": "WBC", "LBC": "WBC", "NBC": "WBC", "BBC": "RBC", "UPC": "WBC",
     "LYMA": "LYM#", "LYM#": "LYM#", "LYN": "LYM%", "LYNY": "LYM%", "LYNY,": "LYM%",
     "LXM#": "LYM#", "LXM": "LYM#", "LXN": "LYM%", "LYME": "LYM#", "ZXHE": "LYM#", "LYK": "LYM#", "LYK:": "LYM#",
     "LY": "LYM#", "LYMA#": "LYM#", "LHIY": "LYM%", 
-    "HID#": "MID#", "HID": "MID%", "HIDA": "MID%", "MID": "MID%", "MiD#": "MID#", "MiD": "MID%", "NID#": "MID#", "HIDE": "MID#", "HID/": "MID%", "ND3": "MID#", "ND": "MID#",
+    "HID#": "MID#", "HID": "MID%", "HIDA": "MID%", "MID": "MID%", "MiD#": "MID#", "MiD": "MID%", "NID#": "MID#", "HIDE": "MID#", "HID/": "MID%", "ND3": "MID#", "ND": "MID#", "NTM": "MID#",
     "KIV": "MID%", 
-    "GRAk": "GRA#", "GRAv": "GRA%", "GRAY": "GRA%", "GRAy": "GRA%", "GRAK": "GRA#", "GRAT": "GRA%", "GRAAE": "GRA#", "GRAX": "GRA#",
-    "6RA:": "GRA#", "6RAK": "GRA#",  
+    "GRAk": "GRA#", "GRAv": "GRA%", "GRAY": "GRA%", "GRAy": "GRA%", "GRAK": "GRA#", "GRAT": "GRA%", "GRAAE": "GRA#", "GRAX": "GRA#", "GKAS": "GRA#",
+    "6RA:": "GRA#", "6RAK": "GRA#", "6RAY": "GRA%",
     "HGB": "HGB", "HGb": "HGB", "H6B": "HGB", "468": "HGB", "48": "HGB",
-    "68F": "HGB",  
-    "HCHC": "MCHC", "HChC": "MCHC", "MCHO": "MCHC", "KCHC": "MCHC", "KOC": "MCHC", "KOX": "MCHC",
-    "KB": "MCHC",  
-    "HCh": "MCH", "CH": "MCH", "KOI": "MCH",
-    "KH": "MCH",  
+    "68F": "HGB", "7B": "HGB",
+    "HCHC": "MCHC", "HChC": "MCHC", "MCHO": "MCHC", "KCHC": "MCHC", "KOC": "MCHC", "KOX": "MCHC", "HCH": "MCHC",
+    "KB": "MCHC", "KOI": "MCH",
+    "HCh": "MCH", "CH": "MCH", "KH": "MCH", "KCH": "MCH",
     "HCV": "MCV", "HV": "MCV", "HQV": "MCV", "KCV": "MCV", "KCY": "MCV",
-    "KV": "MCV",  
+    "KV": "MCV", "KCV": "MCV", "KCY": "MCV",
     "HCi": "HCT", "HCI": "HCT", "HCT": "HCT", "FCT": "HCT", "KCT": "HCT",
-    "K;": "HCT", 
+    "K;": "HCT", "HCL": "HCT",
     "RDV-V": "RDW-CV", "RDV(V": "RDW-CV", "RDV-(V": "RDW-CV", "RDV-CV": "RDW-CV", "RDU-QV": "RDW-CV", "RDU-WV": "RDW-CV", "RWU-WV": "RDW-CV", "ROY-CY": "RDW-CV", "ROX-CY": "RDW-CV",
-    "RN-@V": "RDW-CV",  
+    "RN-@V": "RDW-CV", "RDU-CV": "RDW-CV", "RDU-cV": "RDW-CV",
     "RDU-SD": "RDW-SD", "RDU-SD)": "RDW-SD", "RDH-SD": "RDW-SD", "RD-SD": "RDW-SD", "RDV-SD": "RDW-SD", "RDX-SO": "RDW-SD", "ROX-SD": "RDW-SD",
-    "RU-SB]": "RDW-SD", 
-    "PLI": "PLT", "PLl": "PLT",
-    "FLF": "PLT", 
-    "PDU": "PDW", "PDH": "PDW", "PDw": "PDW", "PDu": "PDW", "POX": "PDW",
-    "PCI": "PCT",
-    "P-LoR": "P-LCR", "P-LOR": "P-LCR", "P-LG": "P-LCR",
+    "RU-SB]": "RDW-SD", "RDU-SD": "RDW-SD",
+    "PLI": "PLT", "PLl": "PLT", "PLT": "PLT",
+    "FLF": "PLT", "PI": "PLT",
+    "PDU": "PDW", "PDH": "PDW", "PDw": "PDW", "PDu": "PDW", "POX": "PDW", "PDV": "PDW", "pDV": "PDW",
+    "PCI": "PCT", "Pci": "PCT",
+    "P-LoR": "P-LCR", "P-LOR": "P-LCR", "P-LG": "P-LCR", "P-LCR": "P-LCR",
     "RbC": "RBC", "RBC": "RBC",
     "AIt": "", "AIT": "", "Alt": "",
     "ID": "LYM%",
-    "HPV": "MPV", "HVP": "MPV", "NPV": "MPV", "HPY": "MPV", "KPV": "MPV",
+    "HPV": "MPV", "HVP": "MPV", "NPV": "MPV", "HPY": "MPV", "KPV": "MPV", "PV": "MPV", "pV": "MPV", "NpU": "MPV",
+    "CRL": "GRA%", "L9": "LYM%",
 }
 CORRECCIONES_ITEM = {k.upper(): v for k, v in CORRECCIONES_ITEM.items()}
 CORRECCIONES_ITEM["RDU-WV"] = "RDW-CV"
@@ -60,6 +60,9 @@ PATRONES_ITEM = [
 
 _PATRON_RANGO = re.compile(
     r'^(.+?)\s+(\d[\d.,]*\s*-\s*\d[\d.,]*)$'
+)
+_PATRON_RANGO_FLEX = re.compile(
+    r'^(.+?)\s+(\d[\d.,]*\s*-\s*\d[\d.,]*(?:\s+\d[\d.,]*)?)$'
 )
 
 
@@ -115,10 +118,19 @@ def corregir_referencia(texto):
 
 
 def separar_resultado_referencia(resultado, referencia):
-   
     if referencia:
         return resultado, referencia
-    m = _PATRON_RANGO.match(resultado.strip())
+    s = resultado.strip()
+    m = _PATRON_RANGO.match(s)
     if m:
         return m.group(1).strip(), m.group(2).strip()
+    m = _PATRON_RANGO_FLEX.match(s)
+    if m:
+        ref = m.group(2).strip().replace(" ", "")
+        return m.group(1).strip(), ref
+    m = re.search(r'(\d[\d.,]*\s*[-–]\s*\d[\d.,]*(?:\s+\d[\d.,]*)?)\s*$', s)
+    if m:
+        ref = m.group(1).strip().replace(" ", "")
+        res = s[:m.start()].strip()
+        return res, ref
     return resultado, referencia

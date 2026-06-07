@@ -1,11 +1,11 @@
-archivo,tipo,total_filas,filas_completas,col_item,col_resultado,col_flag,% item,% resultado,% flag,% completo
-AKIRA-CHAVARRY-2026-05-14-0914.pdf,pdfplumber,24,24,24,24,24,100.0,100.0,100.0,100.0
-LUKI-CORRALES-2026-05-14-1724.pdf,pdfplumber,24,24,24,24,24,100.0,100.0,100.0,100.0
-ZEUS-CABRERA-2026-05-24-1035.pdf,pdfplumber,24,24,24,24,24,100.0,100.0,100.0,100.0
-16823793-d19c-4539-8d5d-196161e1199b.png,easyocr,20,19,20,19,20,100.0,95.0,100.0,95.0
-23a07b2e-ec35-4d85-8599-9b9df839f9ec.jpg,easyocr,20,19,20,19,19,100.0,95.0,95.0,95.0
-5ce50946-7def-4e60-8063-9a8bc6de3cd6.png,easyocr,20,15,20,19,16,100.0,95.0,80.0,75.0
-5e39366e-9269-4181-98ea-9f6e4987312b.png,easyocr,20,16,20,18,18,100.0,90.0,90.0,80.0
-a76eab4a-1ddb-4f3d-8aa7-b308f38090dc.jpg,easyocr,20,18,20,18,20,100.0,90.0,100.0,90.0
-aaaa8592-ff9a-439a-83a4-8153aa0f2310.png,easyocr,20,20,20,20,20,100.0,100.0,100.0,100.0
-b3403d54-7fc4-414c-9eb0-0058886202d5.png,easyocr,20,17,20,19,17,100.0,95.0,85.0,85.0
+archivo,tipo,total_filas,filas_completas,col_item,col_resultado,col_referencia,col_flag,% item,% resultado,% referencia,% flag,% completo
+AKIRA-CHAVARRY-2026-05-14-0914.pdf,pdfplumber,24,24,24,24,24,24,100.0,100.0,100.0,100.0,100.0
+LUKI-CORRALES-2026-05-14-1724.pdf,pdfplumber,24,24,24,24,24,24,100.0,100.0,100.0,100.0,100.0
+ZEUS-CABRERA-2026-05-24-1035.pdf,pdfplumber,24,24,24,24,24,24,100.0,100.0,100.0,100.0,100.0
+16823793-d19c-4539-8d5d-196161e1199b.png,easyocr,20,19,20,19,20,20,100.0,95.0,100.0,100.0,95.0
+23a07b2e-ec35-4d85-8599-9b9df839f9ec.jpg,easyocr,20,16,20,16,19,20,100.0,80.0,95.0,100.0,80.0
+5ce50946-7def-4e60-8063-9a8bc6de3cd6.png,easyocr,20,16,20,17,17,19,100.0,85.0,85.0,95.0,80.0
+5e39366e-9269-4181-98ea-9f6e4987312b.png,easyocr,20,15,20,18,19,16,100.0,90.0,95.0,80.0,75.0
+a76eab4a-1ddb-4f3d-8aa7-b308f38090dc.jpg,easyocr,20,19,20,19,19,20,100.0,95.0,95.0,100.0,95.0
+aaaa8592-ff9a-439a-83a4-8153aa0f2310.png,easyocr,20,20,20,20,20,20,100.0,100.0,100.0,100.0,100.0
+b3403d54-7fc4-414c-9eb0-0058886202d5.png,easyocr,20,19,20,20,20,19,100.0,100.0,100.0,95.0,95.0

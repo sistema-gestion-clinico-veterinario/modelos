@@ -7,7 +7,7 @@ IMAGENES_DIR = DATA_DIR / "imagenes"
 GROUND_TRUTH_DIR = BASE_DIR / "ground_truth"
 RESULTS_DIR = BASE_DIR / "results"
 
-COLUMNAS = ["item", "resultado", "flag"]
+COLUMNAS = ["item", "resultado", "referencia", "flag"]
 
 TABLE_SETTINGS_PDFPLUMBER = {
     "vertical_strategy": "lines",

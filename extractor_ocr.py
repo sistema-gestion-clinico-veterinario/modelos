@@ -1,6 +1,7 @@
 import easyocr
 import numpy as np
 import pandas as pd
+import sys
 from config import OCR_IDIOMAS, OCR_GPU, OCR_CONFIANZA_MINIMA, COLUMNAS
 from corrector import corregir_item, corregir_resultado, corregir_referencia, separar_resultado_referencia
 from preprocesador import preprocesar_imagen
@@ -12,7 +13,8 @@ reader = easyocr.Reader(OCR_IDIOMAS, gpu=OCR_GPU)
 def extraer(ruta_imagen: str) -> pd.DataFrame:
     try:
         imagen = preprocesar_imagen(ruta_imagen)
-    except Exception:
+    except Exception as e:
+        print(f"  [ERROR] preprocesar_imagen falló: {e}", file=sys.stderr)
         return pd.DataFrame(columns=COLUMNAS)
     resultados = reader.readtext(imagen, detail=1, paragraph=False)
     return _estructurar_tabla(resultados)
@@ -101,61 +103,121 @@ def _agrupar_por_y(items):
     return filas
 
 
-def _detectar_zonas(filas):
-    header_keywords = {"item", "resultado", "referencia", "nota", "iten", "resuitado", "esuiltalo", "refereei", "referenci", "resutado"}
-    best_row = None
-    best_count = 0
-    for fila in filas:
-        textos = [p["texto"].lower().strip() for p in fila]
-        match_count = sum(1 for t in textos if t in header_keywords)
-        if match_count >= 2 and match_count > best_count:
-            best_row = fila
-            best_count = match_count
+def _mayormente_upper(texto: str) -> bool:
+    texto = texto.strip()
+    if not 3 <= len(texto) <= 9:
+        return False
+    letters = [c for c in texto if c.isalpha()]
+    if not letters:
+        return False
+    upper_count = sum(1 for c in letters if c.isupper())
+    return upper_count / len(letters) >= 0.6
 
-    if best_row is not None and len(best_row) >= 2:
-        xs_header = sorted([p["x"] for p in best_row])
-        n = len(xs_header)
-        if n == 2:
-   
-            gap = xs_header[1] - xs_header[0]
-            cortes = [xs_header[0] + gap / 2, xs_header[1] + gap / 2, xs_header[1] + gap]
-        elif n == 3:
-            cortes = [
-                (xs_header[0] + xs_header[1]) / 2,
-                (xs_header[1] + xs_header[2]) / 2,
-                xs_header[2] + (xs_header[2] - xs_header[1]) / 2,
-            ]
+
+_HF = {
+    "resultado": {"resultado", "csultado", "resuitado", "resutado", "esuiltalo", "resuhtado", "resuhrado", "resulrado"},
+    "referencia": {"referencia", "referenci", "refereei", "referenc", "relerencia", "referenua", "referencis"},
+    "nota": {"nota", "hota"},
+    "item": {"item", "iten"},
+}
+
+
+def _detectar_zonas(filas):
+    xs_all = [p["x"] for fila in filas for p in fila]
+    if xs_all:
+        max_x_img = max(xs_all)
+        left_words = [
+            p for fila in filas for p in fila
+            if p["x"] < max_x_img * 0.3
+            and 3 <= len(p["texto"].strip()) <= 9
+            and _mayormente_upper(p["texto"])
+        ]
+        item_boundary = max(p["x"] for p in left_words) + 80 if left_words else None
+    else:
+        max_x_img = 600
+        item_boundary = None
+
+    header_xs = {"resultado": [], "referencia": [], "nota": [], "item": []}
+    for fila in filas:
+        for p in fila:
+            t = p["texto"].lower().strip()
+            for tipo, kws in _HF.items():
+                if any(kw in t for kw in kws):
+                    header_xs[tipo].append(p["x"])
+
+    has_header = any(bool(v) for v in header_xs.values())
+    if has_header:
+        res_x = float(np.median(header_xs["resultado"])) if header_xs["resultado"] else None
+        ref_x = float(np.median(header_xs["referencia"])) if header_xs["referencia"] else None
+        nota_x = float(np.median(header_xs["nota"])) if header_xs["nota"] else None
+        item_x = float(np.median(header_xs["item"])) if header_xs["item"] else None
+
+        if item_x is not None:
+            c0 = item_x + 40
+        elif item_boundary is not None:
+            c0 = item_boundary
+        elif res_x is not None:
+            c0 = res_x - 100
         else:
-            cortes = [
-                (xs_header[0] + xs_header[1]) / 2,
-                (xs_header[1] + xs_header[2]) / 2,
-                (xs_header[2] + xs_header[3]) / 2,
-            ]
+            c0 = max_x_img * 0.3
+
+        if res_x is not None and ref_x is not None:
+            c1 = (res_x + ref_x) / 2
+        elif res_x is not None and nota_x is not None:
+            c1 = (res_x + nota_x) / 2
+        elif res_x is not None:
+            c1 = res_x + 200
+        elif ref_x is not None:
+            c1 = ref_x - 100
+        else:
+            c1 = max_x_img * 0.55
+
+        if ref_x is not None and nota_x is not None:
+            c2 = (ref_x + nota_x) / 2
+        elif nota_x is not None:
+            c2 = nota_x + 100
+        elif ref_x is not None:
+            c2 = ref_x + 200
+        else:
+            c2 = max_x_img * 0.8
+
+        cortes = sorted([c0, c1, c2])
         return [(0, cortes[0]), (cortes[0], cortes[1]), (cortes[1], cortes[2]), (cortes[2], 99999)]
 
-    xs_todas = sorted([p["x"] for fila in filas for p in fila])
-    if len(xs_todas) < 10:
-        return _zonas_fallback(600)
+    if item_boundary is not None:
+        xs_todas = sorted(xs_all)
+        gaps = [xs_todas[i + 1] - xs_todas[i] for i in range(len(xs_todas) - 1)]
+        gap_indices = np.argsort(gaps)[-2:]
+        gap_indices.sort()
+        cortes = [item_boundary] + [(xs_todas[g] + xs_todas[g + 1]) / 2 for g in gap_indices]
+        if len(cortes) < 3:
+            cortes.extend([cortes[-1] + 200] * (3 - len(cortes)))
+        cortes.sort()
+        return [(0, cortes[0]), (cortes[0], cortes[1]), (cortes[1], cortes[2]), (cortes[2], 99999)]
 
+    if len(xs_all) < 10:
+        return _zonas_fallback(max_x_img)
+
+    xs_todas = sorted(xs_all)
     gaps = [xs_todas[i + 1] - xs_todas[i] for i in range(len(xs_todas) - 1)]
     gap_indices = np.argsort(gaps)[-3:]
     gap_indices.sort()
     cortes = [(xs_todas[g] + xs_todas[g + 1]) / 2 for g in gap_indices]
-
+    cortes.sort()
     return [(0, cortes[0]), (cortes[0], cortes[1]), (cortes[1], cortes[2]), (cortes[2], 99999)]
 
 
-def _zonas_fallback(ancho_est):
-    zona = ancho_est / 4
-    return [(0, zona), (zona, zona * 2), (zona * 2, zona * 3), (zona * 3, 99999)]
+def _zonas_fallback(ancho_img):
+    return [(0, ancho_img * 0.3), (ancho_img * 0.3, ancho_img * 0.55), (ancho_img * 0.55, ancho_img * 0.8), (ancho_img * 0.8, 99999)]
 
 
 def _mapear_filas(filas, zonas):
     nombres_cols = ["item", "resultado", "referencia", "flag"]
     header_indice = -1
+    header_kw_set = set().union(*_HF.values())
     for idx, fila in enumerate(filas):
         textos_lower = [p["texto"].lower().strip() for p in fila]
-        if sum(1 for t in textos_lower if t in {"item", "resultado", "referencia", "nota", "iten", "resuitado", "esuiltalo", "refereei", "referenci", "resutado"}) >= 2:
+        if sum(1 for t in textos_lower if any(kw in t for kw in header_kw_set)) >= 1:
             header_indice = idx
             break
 
@@ -199,8 +261,13 @@ def _mapear_filas(filas, zonas):
             fila_dict["resultado"] = corregir_resultado(fila_dict["resultado"])
             fila_dict["referencia"] = corregir_referencia(fila_dict["referencia"])
 
-            fila_dict["resultado"], fila_dict["referencia"] = separar_resultado_referencia(
-                fila_dict["resultado"], fila_dict["referencia"]
-            )
+            if not fila_dict["resultado"] and fila_dict["referencia"]:
+                fila_dict["resultado"], fila_dict["referencia"] = separar_resultado_referencia(
+                    fila_dict["referencia"], ""
+                )
+            else:
+                fila_dict["resultado"], fila_dict["referencia"] = separar_resultado_referencia(
+                    fila_dict["resultado"], fila_dict["referencia"]
+                )
             datos.append(fila_dict)
     return datos

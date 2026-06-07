@@ -14,16 +14,30 @@ def preprocesar_imagen(ruta_imagen: str) -> np.ndarray:
         gris = _rotar(gris, angulo)
 
     h, w = gris.shape
-    if w < 1000:
-        factor = 1000 / w
-        gris = cv2.resize(gris, (int(w * factor), int(h * factor)), interpolation=cv2.INTER_CUBIC)
+    min_dim = 3000
+    if w < min_dim or h < min_dim:
+        factor = min_dim / min(w, h)
+        gris = cv2.resize(gris, None, fx=factor, fy=factor, interpolation=cv2.INTER_CUBIC)
 
-    clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8, 8))
+    gris = _unsharp_mask(gris, sigma=1.0, strength=1.5)
+
+    clip = 2.0 if _es_buena_calidad(gris) else 4.0
+    clahe = cv2.createCLAHE(clipLimit=clip, tileGridSize=(8, 8))
     gris = clahe.apply(gris)
 
     gris = cv2.bilateralFilter(gris, 5, 75, 75)
 
     return gris
+
+
+def _es_buena_calidad(gris: np.ndarray) -> bool:
+    lap = cv2.Laplacian(gris, cv2.CV_64F).var()
+    return lap > 80
+
+
+def _unsharp_mask(img: np.ndarray, sigma: float = 1.0, strength: float = 1.5) -> np.ndarray:
+    blurred = cv2.GaussianBlur(img, (0, 0), sigma)
+    return cv2.addWeighted(img, 1.0 + strength, blurred, -strength, 0)
 
 
 def _detectar_angulo(gris: np.ndarray) -> float:
