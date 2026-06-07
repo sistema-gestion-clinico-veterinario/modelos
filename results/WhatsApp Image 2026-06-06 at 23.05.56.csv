@@ -1,21 +1,21 @@
 item,resultado,referencia,flag
 WBC,12.39 10^9/L,6-17,
 LYM#,2.83 10^9/L,0.8-5.1,
-MID#,0.55 10^9/L,0-1.8,
-GRA#,9 10^9/L,4-12.6,
+MID#,,,
+GRA#,,,
 LYM%,,,
-MID%,44 %,2-9,H
-GRA%,72 %,9-83,
-RBC,934 10^12/L,24 5,H
-HGB,94 g/dL,W4 !,
+MID%,,,
+GRA%,,,
+RBC,3 10^12/L,285,
+HGB,,,
 MCHC,,,
-MCH,21.2 pg,2 %,
-MCV,4 fL,"K""",
-RDW-CV,,,
+MCH,21 pg,,
+MCV,4 fL,,
+RDW-CV,14 %,11-5,H
 RDW-SD,,,
-HCT,49 %,29-56,
-PLT,219 10^9/L,200-460,
-MPV,7 fL,7-j229,
-PDW,1 %,10 49,L
-PCT,8 %,1445,
-P-LCR,13 %,13-435,
+HCT,49.8 %,29-56,
+PLT,219 10^9/L,2200-460,L
+MPV,,,
+PDW,1 %,,
+PCT,8.164 %,,
+P-LCR,13 %,,
