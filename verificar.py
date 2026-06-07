@@ -33,9 +33,9 @@ for archivo in archivos:
             if normalizar(fila_ext.get(col, '')) != normalizar(fila_gt.get(col, '')):
                 ok = False
         marca = 'OK' if ok else 'XX'
-        print(f'  {marca}  {fila_ext["item"]:30s} | {fila_ext["resultado"]:12s} | {fila_ext["referencia"]:25s} | {fila_ext["flag"]}')
+        print(f'  {marca}  {fila_ext["item"]:30s} | {fila_ext["resultado"]:12s} | {fila_ext["flag"]}')
         if not ok:
-            print(f'       GT: {fila_gt["item"]:30s} | {fila_gt["resultado"]:12s} | {fila_gt["referencia"]:25s} | {fila_gt["flag"]}')
+            print(f'       GT: {fila_gt["item"]:30s} | {fila_gt["resultado"]:12s} | {fila_gt["flag"]}')
         if ok:
             aciertos += 1
     

@@ -27,7 +27,6 @@ def evaluar(archivos: list, ground_truth_path: str) -> pd.DataFrame:
             "filas_completas": 0,
             "col_item": 0,
             "col_resultado": 0,
-            "col_referencia": 0,
             "col_flag": 0,
         }
 
@@ -53,14 +52,13 @@ def generar_informe(df: pd.DataFrame):
     n = df["total_filas"]
     df["% item"] = (df["col_item"] / n * 100).round(1)
     df["% resultado"] = (df["col_resultado"] / n * 100).round(1)
-    df["% referencia"] = (df["col_referencia"] / n * 100).round(1)
     df["% flag"] = (df["col_flag"] / n * 100).round(1)
     df["% completo"] = (df["filas_completas"] / n * 100).round(1)
 
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     df.to_csv(RESULTS_DIR / "metricas_detalladas.csv", index=False, encoding="utf-8")
 
-    columnas_porcentaje = ["% item", "% resultado", "% referencia", "% flag", "% completo"]
+    columnas_porcentaje = ["% item", "% resultado", "% flag", "% completo"]
     resumen = df.groupby("tipo")[columnas_porcentaje].mean().round(1)
     resumen.to_csv(RESULTS_DIR / "resumen_por_estrategia.csv", encoding="utf-8")
 

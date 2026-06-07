@@ -4,7 +4,7 @@ import numpy as np
 from pathlib import Path
 
 resumen = pd.read_csv('results/resumen_por_estrategia.csv', index_col='tipo')
-metricas = ['% item', '% resultado', '% referencia', '% flag', '% completo']
+metricas = ['% item', '% resultado', '% flag', '% completo']
 
 x = np.arange(len(metricas))
 ancho = 0.3

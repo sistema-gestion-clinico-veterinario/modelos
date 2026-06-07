@@ -44,57 +44,94 @@ def _estructurar_tabla(resultados):
 def _agrupar_por_y(items):
     if not items:
         return []
+    
+
     altos = [i["h"] for i in items]
-    alto_promedio = float(np.mean(altos)) if altos else 20.0
-    tolerancia = alto_promedio * 0.5
+    median_h = np.median(altos) if altos else 20.0
+    items_filtrados = [i for i in items if i["h"] <= median_h * 2.5]
+    if not items_filtrados:
+        items_filtrados = items
+
+
+    max_x = max(i["x"] for i in items_filtrados) if items_filtrados else 1000
+    col_items = [i for i in items_filtrados if i["x"] < max_x * 0.35]
+    col_results = [i for i in items_filtrados if max_x * 0.35 <= i["x"] < max_x * 0.55]
+    col_refs = [i for i in items_filtrados if max_x * 0.55 <= i["x"] < max_x * 0.85]
+
+    slopes = []
+
+    for it in col_items:
+        for res in col_results:
+            dy = res["y"] - it["y"]
+            dx = res["x"] - it["x"]
+            if dx > 50 and abs(dy) < 40:
+                slopes.append(dy / dx)
+
+
+    for res in col_results:
+        for ref in col_refs:
+            dy = ref["y"] - res["y"]
+            dx = ref["x"] - res["x"]
+            if dx > 50 and abs(dy) < 40:
+                slopes.append(dy / dx)
+
+    estimated_slope = float(np.median(slopes)) if slopes else 0.0
+
+
+    for item in items_filtrados:
+        item["y_proj"] = item["y"] - estimated_slope * item["x"]
+
+
+    items_filtrados.sort(key=lambda i: i["y_proj"])
+
+
+    alto_promedio = float(np.median([i["h"] for i in items_filtrados])) if items_filtrados else 20.0
+    tolerancia = alto_promedio * 0.4
 
     filas = []
-    fila_actual = [items[0]]
-    for item in items[1:]:
-        if abs(item["y"] - fila_actual[-1]["y"]) <= tolerancia:
+    fila_actual = [items_filtrados[0]]
+    for item in items_filtrados[1:]:
+        if abs(item["y_proj"] - fila_actual[-1]["y_proj"]) <= tolerancia:
             fila_actual.append(item)
         else:
             filas.append(sorted(fila_actual, key=lambda i: i["x"]))
             fila_actual = [item]
     filas.append(sorted(fila_actual, key=lambda i: i["x"]))
 
-    filas = _separar_filas_por_altura(filas)
     return filas
 
 
-def _separar_filas_por_altura(filas):
-    resultado = []
-    for fila in filas:
-        if len(fila) < 2:
-            resultado.append(fila)
-            continue
-        altos = np.array([p["h"] for p in fila])
-        if max(altos) > min(altos) * 1.8:
-            grupo_alto = [p for p in fila if p["h"] > np.median(altos) * 1.5]
-            grupo_normal = [p for p in fila if p["h"] <= np.median(altos) * 1.5]
-            if grupo_alto and grupo_normal:
-                resultado.append(grupo_normal)
-                resultado.append(grupo_alto)
-            else:
-                resultado.append(fila)
-        else:
-            resultado.append(fila)
-    return resultado
-
-
 def _detectar_zonas(filas):
-    header_keywords = {"item", "resultado", "referencia", "nota", "iten", "resuitado"}
+    header_keywords = {"item", "resultado", "referencia", "nota", "iten", "resuitado", "esuiltalo", "refereei", "referenci", "resutado"}
+    best_row = None
+    best_count = 0
     for fila in filas:
         textos = [p["texto"].lower().strip() for p in fila]
         match_count = sum(1 for t in textos if t in header_keywords)
-        if match_count >= 2 and len(fila) >= 4:
-            xs = sorted([p["x"] for p in fila])
+        if match_count >= 2 and match_count > best_count:
+            best_row = fila
+            best_count = match_count
+
+    if best_row is not None and len(best_row) >= 2:
+        xs_header = sorted([p["x"] for p in best_row])
+        n = len(xs_header)
+        if n == 2:
+   
+            gap = xs_header[1] - xs_header[0]
+            cortes = [xs_header[0] + gap / 2, xs_header[1] + gap / 2, xs_header[1] + gap]
+        elif n == 3:
             cortes = [
-                (xs[0] + xs[1]) / 2,
-                (xs[1] + xs[2]) / 2,
-                (xs[2] + xs[3]) / 2 if len(xs) > 3 else xs[2] + 80,
+                (xs_header[0] + xs_header[1]) / 2,
+                (xs_header[1] + xs_header[2]) / 2,
+                xs_header[2] + (xs_header[2] - xs_header[1]) / 2,
             ]
-            return [(0, cortes[0]), (cortes[0], cortes[1]), (cortes[1], cortes[2]), (cortes[2], 99999)]
+        else:
+            cortes = [
+                (xs_header[0] + xs_header[1]) / 2,
+                (xs_header[1] + xs_header[2]) / 2,
+                (xs_header[2] + xs_header[3]) / 2,
+            ]
+        return [(0, cortes[0]), (cortes[0], cortes[1]), (cortes[1], cortes[2]), (cortes[2], 99999)]
 
     xs_todas = sorted([p["x"] for fila in filas for p in fila])
     if len(xs_todas) < 10:
@@ -118,7 +155,7 @@ def _mapear_filas(filas, zonas):
     header_indice = -1
     for idx, fila in enumerate(filas):
         textos_lower = [p["texto"].lower().strip() for p in fila]
-        if sum(1 for t in textos_lower if t in {"item", "resultado", "referencia", "nota", "iten", "resuitado"}) >= 2:
+        if sum(1 for t in textos_lower if t in {"item", "resultado", "referencia", "nota", "iten", "resuitado", "esuiltalo", "refereei", "referenci", "resutado"}) >= 2:
             header_indice = idx
             break
 

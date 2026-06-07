@@ -8,7 +8,7 @@ from extractor_pdf import extraer as extraer_pdf
 from extractor_ocr import extraer as extraer_ocr
 from extractor_graficos import extraer_graficos
 
-# Perfiles de referencia de hemogramas para imágenes de EasyOCR
+
 PERFILES_REFERENCIA = [
     # Perfil 1 (Perro estándar)
     {
@@ -129,7 +129,6 @@ def determinar_perfil(mapa_extraido: dict) -> dict:
                 scores[idx] += 2
             elif dist <= 4:
                 scores[idx] += 1
-    # Devolver el perfil con mayor coincidencia
     idx_max = scores.index(max(scores))
     return PERFILES_REFERENCIA[idx_max]
 
@@ -139,7 +138,7 @@ def normalizar_resultado_ocr(item: str, resultado_str: str) -> str:
         return ""
     res_clean = resultado_str.replace(",", ".")
     
-    # Resolver confusiones numéricas comunes de OCR antes de buscar el número
+
     tokens = res_clean.split()
     unidad_esperada = MAPA_UNIDADES_OCR.get(item.upper(), "")
     
@@ -149,15 +148,15 @@ def normalizar_resultado_ocr(item: str, resultado_str: str) -> str:
             if t.endswith("%") or t.endswith("{") or t.endswith("*"):
                 suffix = t[-1]
                 t = t[:-1]
-            # Preserve scientific notation tokens (10^9, 10^12, etc.)
+
             if not any(u in t.upper() for u in ["10^", "10*", "109", "1012"]):
-                # Fix character-digit confusions: M->7 only at start of numeric-looking tokens
+
                 if t and t[0] == 'M' and len(t) > 1 and any(c.isdigit() for c in t[1:]):
                     t = '7' + t[1:]
                 t = t.replace("L", "4").replace("I", "1").replace("O", "0").replace("S", "5").replace("B", "8")
             t = t + suffix
             tokens[idx] = t
-        # Fix unit aliases: ML -> fL, Ual -> g/dL, etc.
+
         elif t.upper() in {"ML", "ML."} and unidad_esperada == "fL":
             tokens[idx] = "fL"
     res_clean = " ".join(tokens)
@@ -229,17 +228,17 @@ def procesar(archivo: str) -> tuple:
                 "flag": flag
             }
 
-    # Si es OCR, aplicar normalización por perfil de referencia y unidades
+
     if tipo == "easyocr":
         perfil_ganador = determinar_perfil(mapa_extraido)
         items_ocr_upper = [x.upper() for x in items_estandar]
         for item_std in items_ocr_upper:
             datos = mapa_extraido.get(item_std, {"resultado": "", "referencia": "", "flag": ""})
             
-            # Normalizar resultado
+         
             nuevo_res = normalizar_resultado_ocr(item_std, datos["resultado"])
             
-            # Normalizar referencia: si es válida o parecida a un candidato la dejamos, sino usamos la del perfil ganador
+         
             ref_original = datos["referencia"].strip()
             candidatos = CANDIDATOS_REFERENCIA.get(item_std)
             nueva_ref = ""
@@ -257,10 +256,15 @@ def procesar(archivo: str) -> tuple:
             else:
                 nueva_ref = perfil_ganador.get(item_std, "")
             
-            # Calcular o verificar flag
+
             nuevo_flag = datos["flag"]
             if not nuevo_flag and nuevo_res and nueva_ref:
                 nuevo_flag = calcular_flag(nuevo_res, nueva_ref)
+            
+            # Si no hay resultado, no se deben tomar ni rellenar valores referenciales ni flags
+            if not nuevo_res:
+                nueva_ref = ""
+                nuevo_flag = ""
                 
             mapa_extraido[item_std] = {
                 "resultado": nuevo_res,
@@ -326,7 +330,6 @@ def main():
         print(f"Procesando: {archivo} ...")
         try:
             df, tipo = procesar(archivo)
-            # Guardar resultados individuales
             nombre_base = Path(archivo).stem
             dir_results = Path("results")
             dir_results.mkdir(exist_ok=True)
