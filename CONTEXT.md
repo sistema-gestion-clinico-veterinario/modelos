@@ -80,7 +80,7 @@ modelos/
 ## 4. RUTAS LOCALES (máquina de desarrollo)
 
 ```
-D:\UPAO_Diogho_Baylon\IX\Taller Integrador I\ModelosIA\
+E:\Taller Integrador I\ModelosIA\
 ├── Hemogramas\          ← hemogramas PDF de clínica colaboradora
 ├── modelos\             ← repo GitHub clonado (AQUÍ SE TRABAJA)
 └── Radiografias\        ← dataset completo (~45 GB, NO se sube a GitHub)
@@ -100,31 +100,44 @@ D:\UPAO_Diogho_Baylon\IX\Taller Integrador I\ModelosIA\
     │       └── dataset_completo.csv
     └── File list with tags.xlsx
 ```
+> **NOTA:** Migrado de D: a E: (nuevo SSD Kingston 1TB) el 06 Jun 2026. La ruta antigua `D:\UPAO_Diogho_Baylon\IX\...` ya no existe.
 
 ---
 
-## 5. ESTADO ACTUAL DEL PROYECTO (29 Mayo 2026)
+## 5. ESTADO ACTUAL DEL PROYECTO (06 Jun 2026)
 
-### Sprint 1 — COMPLETADO (27 Abr – 23 May)
+### Sprint 1 — COMPLETADO
 | PBI | Descripción | Estado |
 |-----|-------------|--------|
 | TA-001 | Descargar y estructurar dataset VetXRay | ✅ DONE |
 | DO-001 | Reporte dataset VetXRay | ✅ DONE |
 | SP-004 | Investigación arquitecturas CNN | ✅ DONE |
 
-### Presentación Sprint 1 — 24-30 May (EN CURSO)
+### Sprint 2 — Benchmarking CNN (COMPLETADO — revisado por docente hasta DO-003)
+| PBI | Descripción | Estado |
+|-----|-------------|--------|
+| TA-003 | ResNet-50 benchmarking | ✅ DONE — AUC=0.8619 |
+| TA-004 | EfficientNet-B0 + DenseNet-121 benchmarking | ✅ DONE — AUC=0.8621 / 0.8630 |
+| DO-002 | Reporte benchmarking CNN | ✅ DONE |
+| TA-005 | DenseNet-121 modelo ganador | ✅ DONE — AUC test=0.8717 |
+| TA-005B | Optimización de umbrales | ✅ DONE — modelo_final_results.json |
+| DO-003 | Informe entrenamiento CNN final | ✅ DONE |
 
-### Sprint 2 — PRÓXIMO (31 May – 20 Jun)
+### Sprint 2 — Fase 2 (feedback docente 02 Jun 2026 — EN CURSO)
 | PBI | Descripción | Depende de |
 |-----|-------------|------------|
-| TA-003 | Entrenar ResNet-50 (benchmarking) | TA-001 ✅ |
-| TA-004 | Entrenar EfficientNet-B0 + DenseNet-121 | TA-003 |
-| DO-002 | Reporte benchmarking CNN | TA-003, TA-004 |
-| TA-005 | Entrenar modelo ganador con transfer learning | DO-002 |
+| W&B Setup | Configurar Weights & Biases para monitoreo en tiempo real | — |
+| TA-005D | GAN augmentation para clases minoritarias | W&B Setup |
+| TA-003B | ResNet-50 reentrenado con augmented + W&B | TA-005D |
+| TA-004B | EfficientNet-B0 reentrenado con augmented + W&B | TA-005D |
+| TA-005E | DenseNet-121 reentrenado con augmented + W&B | TA-005D |
+| TA-005F | Entrenamiento final del ganador con augmented | TA-003B/004B/005E |
+| TA-005G | Optimización de umbrales del ganador final | TA-005F |
+| TA-005C | Grad-CAM + muestreo aleatorio por clase | TA-005F |
+| TA-006 | Endpoint FastAPI /predict/radiografia | TA-005G |
 | TA-007 | Módulo extracción hemogramas | SP-002 |
 | TA-008 | Endpoint FastAPI hemogramas | TA-007 |
-| TA-006 | Endpoint FastAPI CNN | TA-005 |
-| EN-006 | Integrar LLM en FastAPI | SP-003, TA-011 |
+| EN-006 | Integrar LLM en FastAPI | SP-003 |
 
 ---
 
