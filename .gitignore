@@ -38,6 +38,10 @@ build/
 .ipynb_checkpoints/
 *.ipynb_checkpoints
 
+# W&B — logs locales (las métricas viven en wandb.ai, no en el repo)
+wandb/
+Notebooks/wandb/
+
 # Entornos virtuales
 venv/
 env/
