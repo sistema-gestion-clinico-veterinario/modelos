@@ -9,55 +9,7 @@ from extractor_ocr import extraer as extraer_ocr
 from extractor_graficos import extraer_graficos
 
 
-PERFILES_REFERENCIA = [
-    # Perfil 1 (Perro estándar)
-    {
-        "WBC": "6-17", "LYM#": "0.8-5.1", "MID#": "0-1.8", "GRA#": "4-12.6",
-        "LYM%": "12-30", "MID%": "2-9", "GRA%": "60-83", "RBC": "5.5-8.5",
-        "HGB": "11-19", "MCHC": "30-38", "MCH": "20-25", "MCV": "62-72",
-        "RDW-CV": "11-15.5", "RDW-SD": "35-56", "HCT": "39-56", "PLT": "200-460",
-        "MPV": "7-12.9", "PDW": "10-18", "PCT": "0.1-0.5", "P-LCR": "13-43"
-    },
-    # Perfil 2 (Gato estándar)
-    {
-        "WBC": "5-19.5", "LYM#": "1.5-7", "MID#": "0.1-1.5", "GRA#": "2.5-12.5",
-        "LYM%": "20-55", "MID%": "1-9", "GRA%": "35-75", "RBC": "5.0-10.0",
-        "HGB": "8-15", "MCHC": "30-36", "MCH": "13-17", "MCV": "39-52",
-        "RDW-CV": "11-15.5", "RDW-SD": "35-56", "HCT": "24-45", "PLT": "200-500",
-        "MPV": "6.5-12", "PDW": "10-18", "PCT": "0.1-0.5", "P-LCR": "13-43"
-    },
-    # Perfil 3 (Perro 2 / alternativo)
-    {
-        "WBC": "5-15", "LYM#": "1.0-4.8", "MID#": "0-1.5", "GRA#": "2.5-10.5",
-        "LYM%": "20-50", "MID%": "2-9", "GRA%": "40-75", "RBC": "5.0-8.0",
-        "HGB": "11-17", "MCHC": "30-36", "MCH": "18-26", "MCV": "60-75",
-        "RDW-CV": "11-15.5", "RDW-SD": "35-56", "HCT": "34-50", "PLT": "200-500",
-        "MPV": "7-12.9", "PDW": "10-18", "PCT": "0.1-0.5", "P-LCR": "13-43"
-    }
-]
 
-CANDIDATOS_REFERENCIA = {
-    "WBC": ["5-15", "6-17", "5-19.5"],
-    "LYM#": ["1.0-4.8", "0.8-5.1", "1.5-7"],
-    "MID#": ["0.1-1.5", "0-1.5", "0-1.8"],
-    "GRA#": ["2.5-12.5", "2.5-10.5", "4-12.6"],
-    "LYM%": ["12-30", "20-50", "20-55"],
-    "MID%": ["2-9", "1-9"],
-    "GRA%": ["60-83", "35-75", "40-75"],
-    "RBC": ["5.5-8.5", "5.0-10.0", "5.0-8.0", "5.0-8.5"],
-    "HGB": ["11-17", "11-19", "8-15"],
-    "MCHC": ["30-38", "30-36"],
-    "MCH": ["13-17", "20-25", "18-26", "19-25"],
-    "MCV": ["60-75", "62-72", "39-52", "60-77"],
-    "RDW-CV": ["11-15.5"],
-    "RDW-SD": ["35-56"],
-    "HCT": ["39-56", "34-50", "24-45", "37-55"],
-    "PLT": ["200-500", "200-460"],
-    "MPV": ["6.5-12", "7-12.9"],
-    "PDW": ["10-18"],
-    "PCT": ["0.1-0.5"],
-    "P-LCR": ["13-43"]
-}
 
 
 MAPA_UNIDADES_OCR = {
@@ -97,40 +49,6 @@ ITEMS_OCR = [
     "RBC", "HGB", "MCHC", "MCH", "MCV", "RDW-CV", "RDW-SD",
     "HCT", "PLT", "MPV", "PDW", "PCT", "P-LCR"
 ]
-
-
-def distancia_edicion(s1: str, s2: str) -> int:
-    if len(s1) > len(s2):
-        s1, s2 = s2, s1
-    distances = range(len(s1) + 1)
-    for i2, c2 in enumerate(s2):
-        distances_ = [i2+1]
-        for i1, c1 in enumerate(s1):
-            if c1 == c2:
-                distances_.append(distances[i1])
-            else:
-                distances_.append(1 + min((distances[i1], distances[i1 + 1], distances_[-1])))
-        distances = distances_
-    return distances[-1]
-
-
-def determinar_perfil(mapa_extraido: dict) -> dict:
-    scores = [0, 0, 0]
-    for item, datos in mapa_extraido.items():
-        ref_ext = datos.get("referencia", "").strip().replace(" ", "").replace(",", ".")
-        if not ref_ext:
-            continue
-        for idx, perfil in enumerate(PERFILES_REFERENCIA):
-            ref_perf = perfil.get(item, "").replace(" ", "")
-            if not ref_perf:
-                continue
-            dist = distancia_edicion(ref_ext, ref_perf)
-            if dist <= 2:
-                scores[idx] += 2
-            elif dist <= 4:
-                scores[idx] += 1
-    idx_max = scores.index(max(scores))
-    return PERFILES_REFERENCIA[idx_max]
 
 
 def normalizar_resultado_ocr(item: str, resultado_str: str) -> str:
@@ -230,38 +148,17 @@ def procesar(archivo: str) -> tuple:
 
 
     if tipo == "easyocr":
-        perfil_ganador = determinar_perfil(mapa_extraido)
         items_ocr_upper = [x.upper() for x in items_estandar]
         for item_std in items_ocr_upper:
             datos = mapa_extraido.get(item_std, {"resultado": "", "referencia": "", "flag": ""})
             
-         
             nuevo_res = normalizar_resultado_ocr(item_std, datos["resultado"])
-            
-         
-            ref_original = datos["referencia"].strip()
-            candidatos = CANDIDATOS_REFERENCIA.get(item_std)
-            nueva_ref = ""
-            if candidatos and ref_original:
-                ref_clean = ref_original.replace(" ", "").replace(",", ".")
-                if ref_clean in candidatos:
-                    nueva_ref = ref_clean
-                else:
-                    distancias = [(c, distancia_edicion(ref_clean, c)) for c in candidatos]
-                    best_c, min_dist = min(distancias, key=lambda x: x[1])
-                    if min_dist <= 2:
-                        nueva_ref = best_c
-                    else:
-                        nueva_ref = perfil_ganador.get(item_std, "")
-            else:
-                nueva_ref = perfil_ganador.get(item_std, "")
-            
-
+            nueva_ref = datos["referencia"].strip()
             nuevo_flag = datos["flag"]
+            
             if not nuevo_flag and nuevo_res and nueva_ref:
                 nuevo_flag = calcular_flag(nuevo_res, nueva_ref)
             
-            # Si no hay resultado, no se deben tomar ni rellenar valores referenciales ni flags
             if not nuevo_res:
                 nueva_ref = ""
                 nuevo_flag = ""
