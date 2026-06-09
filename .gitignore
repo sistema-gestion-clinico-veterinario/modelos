@@ -23,6 +23,9 @@ dataset/
 Radiografias/
 Hemogramas/
 
+# Mapping privado hemogramas (datos personales — NUNCA subir)
+hemogramas_mapping_PRIVADO.csv
+
 # Python
 __pycache__/
 *.pyc
@@ -67,3 +70,9 @@ logs/
 *.onnx
 *.tflite
 *.pb
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
