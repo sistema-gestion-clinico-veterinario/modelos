@@ -1,0 +1,17 @@
+{
+    "model": "densenet121",
+    "task": "TA-005E",
+    "best_trial": 4,
+    "best_val_auc": 0.8542,
+    "n_completed": 5,
+    "n_pruned": 1,
+    "params": {
+        "lr_feature": 8.770946743725407e-05,
+        "lr_finetune": 4.8901685083296995e-05,
+        "batch_size": 32,
+        "weight_decay": 9.061902594114385e-06,
+        "n_epochs_ft": 15,
+        "scheduler": "plateau",
+        "dropout": 0.2739417822102108
+    }
+}
