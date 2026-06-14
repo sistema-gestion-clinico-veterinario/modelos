@@ -4,6 +4,7 @@ from fastapi.responses import Response
 from fastapi.middleware.cors import CORSMiddleware
 from predictor import predictor
 from router import router
+from router_laboratorio import router_lab
 
 
 @asynccontextmanager
@@ -13,9 +14,9 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title='VargasVet IA — Radiografía',
-    description='Microservicio de predicción de patologías torácicas veterinarias (DenseNet-121)',
-    version='1.0.0',
+    title='VargasVet IA',
+    description='Microservicio IA veterinario: radiografías (DenseNet-121) + extracción de hemogramas',
+    version='2.0.0',
     lifespan=lifespan
 )
 
@@ -27,6 +28,7 @@ app.add_middleware(
 )
 
 app.include_router(router)
+app.include_router(router_lab)
 
 
 @app.get('/favicon.ico', include_in_schema=False)
