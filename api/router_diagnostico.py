@@ -2,7 +2,7 @@ import json
 import os
 import tempfile
 from pathlib import Path
-from typing import AsyncGenerator, Optional
+from typing import AsyncGenerator, Dict, List, Optional
 
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from fastapi.responses import StreamingResponse
@@ -22,11 +22,20 @@ from predictor import predictor
 router_diag = APIRouter(prefix='/ia', tags=['diagnostico'])
 
 _client: AsyncOpenAI | None = None
+_ocr_reader = None
 _MODEL              = os.getenv('OPENAI_MODEL', 'gpt-4o')
 _MAX_TOKENS         = int(os.getenv('OPENAI_MAX_TOKENS', '4096'))
 _MAX_CONTINUACIONES = 3
 
 LAB_EXTS = {'.pdf'} | IMAGE_EXTENSIONS
+
+
+def _get_ocr_reader():
+    global _ocr_reader
+    if _ocr_reader is None:
+        import easyocr
+        _ocr_reader = easyocr.Reader(['es', 'en'], gpu=False, verbose=False)
+    return _ocr_reader
 
 
 def _get_client() -> AsyncOpenAI:
@@ -46,13 +55,24 @@ def _parse_lab(raw: dict) -> Optional[LaboratorioResult]:
         return None
 
 
+def _combinar_predicciones(all_preds: List[dict]) -> RadiografiResult:
+    """Toma el máximo de probabilidad por clase entre todas las radiografías."""
+    combined: Dict[str, dict] = {}
+    for pred in all_preds:
+        for cls, data in pred.get('predictions', {}).items():
+            if cls not in combined or data['probability'] > combined[cls]['probability']:
+                combined[cls] = dict(data)
+    diagnoses = [cls for cls, data in combined.items() if data.get('positive', False)]
+    return RadiografiResult(diagnoses=diagnoses, predictions=combined)
+
+
 async def _sse_stream(messages: list, escenario: str) -> AsyncGenerator[str, None]:
     client = _get_client()
 
     yield f"data: {json.dumps({'type': 'meta', 'escenario': escenario, 'modelo': _MODEL})}\n\n"
 
     current_messages = list(messages)
-    continuaciones = 0
+    continuaciones   = 0
 
     while True:
         stream = await client.chat.completions.create(
@@ -63,13 +83,13 @@ async def _sse_stream(messages: list, escenario: str) -> AsyncGenerator[str, Non
             stream=True,
         )
 
-        parte_texto = ''
+        parte_texto  = ''
         finish_reason = None
 
         async for chunk in stream:
             choice = chunk.choices[0] if chunk.choices else None
             if choice:
-                delta = choice.delta.content or ''
+                delta         = choice.delta.content or ''
                 finish_reason = choice.finish_reason
                 if delta:
                     parte_texto += delta
@@ -91,69 +111,73 @@ async def _sse_stream(messages: list, escenario: str) -> AsyncGenerator[str, Non
 
 @router_diag.post('/diagnostico')
 async def generar_diagnostico(
-    motivo_consulta: str  = Form(..., min_length=10),
-    especie: str          = Form('Perro'),
-    edad: Optional[str]   = Form(None),
-    sexo: Optional[str]   = Form(None),
-    peso: Optional[str]   = Form(None),
-    archivo_radiografia: Optional[UploadFile] = File(None),
-    archivo_hemograma:   Optional[UploadFile] = File(None),
+    motivo_consulta: str         = Form(..., min_length=10),
+    especie: str                 = Form('Perro'),
+    edad: Optional[str]          = Form(None),
+    sexo: Optional[str]          = Form(None),
+    peso: Optional[str]          = Form(None),
+    archivo_radiografia: List[UploadFile] = File(default=[]),
+    archivo_hemograma:   List[UploadFile] = File(default=[]),
 ):
     try:
         _get_client()
     except RuntimeError as exc:
         raise HTTPException(status_code=503, detail=str(exc))
 
-    # ── Radiografía ─────────────────────────────────────────────────────────
+    radios = [f for f in archivo_radiografia if f and f.filename]
+    labs   = [f for f in archivo_hemograma   if f and f.filename]
+
+    # ── Radiografías (múltiples) ─────────────────────────────────────────────
+    images_b64:  List[str] = []
     radio_result: Optional[RadiografiResult] = None
-    image_b64:   Optional[str]              = None
 
-    if archivo_radiografia and archivo_radiografia.filename:
-        ext = Path(archivo_radiografia.filename).suffix.lower()
-        if ext not in RADIO_EXTS:
-            raise HTTPException(400, f'Formato de radiografía no soportado: "{ext}".')
-        raw_radio = await archivo_radiografia.read()
-        if not raw_radio:
-            raise HTTPException(400, 'El archivo de radiografía está vacío.')
+    if radios:
+        all_preds: List[dict] = []
+        for f in radios:
+            ext = Path(f.filename).suffix.lower()
+            if ext not in RADIO_EXTS:
+                raise HTTPException(400, f'Formato de radiografía no soportado: "{ext}".')
+            raw = await f.read()
+            if not raw:
+                continue
+            try:
+                images_b64.append(image_to_b64(raw, ext))
+            except Exception as e:
+                raise HTTPException(422, f'No se pudo procesar {f.filename}: {e}')
+            try:
+                pred = predictor.predict(raw, f.filename)
+                all_preds.append(pred)
+            except Exception:
+                pass
 
-        try:
-            image_b64 = image_to_b64(raw_radio, ext)
-        except Exception as e:
-            raise HTTPException(422, f'No se pudo procesar la imagen: {e}')
-
-        try:
-            pred = predictor.predict(raw_radio, archivo_radiografia.filename)
-            radio_result = RadiografiResult(
-                diagnoses=pred.get('diagnoses', []),
-                predictions=pred.get('predictions', {}),
-            )
-        except Exception:
+        if all_preds:
+            radio_result = _combinar_predicciones(all_preds)
+        elif images_b64:
             radio_result = RadiografiResult()
 
-    # ── Hemograma ────────────────────────────────────────────────────────────
-    lab_result: Optional[LaboratorioResult] = None
+    # ── Hemogramas (múltiples) ───────────────────────────────────────────────
+    lab_results: List[LaboratorioResult] = []
 
-    if archivo_hemograma and archivo_hemograma.filename:
-        ext = Path(archivo_hemograma.filename).suffix.lower()
+    for f in labs:
+        ext = Path(f.filename).suffix.lower()
         if ext not in LAB_EXTS:
             raise HTTPException(400, f'Formato de hemograma no soportado: "{ext}".')
-        raw_lab = await archivo_hemograma.read()
-        if not raw_lab:
-            raise HTTPException(400, 'El archivo de hemograma está vacío.')
+        raw = await f.read()
+        if not raw:
+            continue
 
         with tempfile.NamedTemporaryFile(delete=False, suffix=ext) as tmp:
-            tmp.write(raw_lab)
+            tmp.write(raw)
             tmp_path = tmp.name
         try:
-            resultado = extraer_laboratorio(tmp_path, especie=especie)
+            reader = _get_ocr_reader() if ext in IMAGE_EXTENSIONS else None
+            resultado = extraer_laboratorio(tmp_path, especie=especie, reader=reader)
             if 'error' not in resultado:
-                lab_result = _parse_lab(resultado)
-            else:
-                raise HTTPException(422, resultado['error'])
-        except HTTPException:
-            raise
-        except Exception as e:
-            raise HTTPException(500, f'Error al procesar hemograma: {e}')
+                parsed = _parse_lab(resultado)
+                if parsed:
+                    lab_results.append(parsed)
+        except Exception:
+            pass
         finally:
             Path(tmp_path).unlink(missing_ok=True)
 
@@ -165,10 +189,10 @@ async def generar_diagnostico(
         sexo=sexo,
         peso=peso,
         radiografia=radio_result,
-        laboratorio=lab_result,
+        laboratorio=lab_results if lab_results else None,
     )
 
-    escenario, messages = build_messages(req, image_b64)
+    escenario, messages = build_messages(req, images_b64)
 
     return StreamingResponse(
         _sse_stream(messages, escenario),

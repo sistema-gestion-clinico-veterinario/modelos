@@ -120,7 +120,7 @@ class DiagnosticoRequest(BaseModel):
     sexo: Optional[str] = None
     peso: Optional[str] = None
     radiografia: Optional[RadiografiResult] = None
-    laboratorio: Optional[LaboratorioResult] = None
+    laboratorio: Optional[List[LaboratorioResult]] = None
 
 
 # ── Schema de salida ─────────────────────────────────────────────────────────
@@ -136,13 +136,14 @@ class DiagnosticoResponse(BaseModel):
 
 # ── Construcción del prompt ──────────────────────────────────────────────────
 
-def _tiene_lab(lab: Optional[LaboratorioResult]) -> bool:
-    if lab is None:
+def _tiene_lab(lab: Optional[List[LaboratorioResult]]) -> bool:
+    if not lab:
         return False
-    return bool(
-        (lab.hematologia and lab.hematologia.parametros)
-        or (lab.quimica and lab.quimica.parametros)
-        or (lab.serologia and lab.serologia.parametros)
+    return any(
+        (r.hematologia and r.hematologia.parametros)
+        or (r.quimica and r.quimica.parametros)
+        or (r.serologia and r.serologia.parametros)
+        for r in lab
     )
 
 
@@ -152,7 +153,7 @@ def _tiene_radio(radio: Optional[RadiografiResult]) -> bool:
     return bool(radio.diagnoses or radio.predictions)
 
 
-def build_prompt(req: DiagnosticoRequest, tiene_imagen: bool = False) -> Tuple[str, str]:
+def build_prompt(req: DiagnosticoRequest, n_imagenes: int = 0) -> Tuple[str, str]:
     """Devuelve (escenario, user_prompt)."""
     con_lab   = _tiene_lab(req.laboratorio)
     con_radio = _tiene_radio(req.radiografia)
@@ -179,8 +180,9 @@ def build_prompt(req: DiagnosticoRequest, tiene_imagen: bool = False) -> Tuple[s
     if con_radio:
         radio = req.radiografia
         p.append('## HALLAZGOS RADIOLÓGICOS (DenseNet-121)\n')
-        if tiene_imagen:
-            p.append('*La imagen radiográfica se adjunta para análisis visual directo.*\n')
+        if n_imagenes > 0:
+            s = 's' if n_imagenes > 1 else ''
+            p.append(f'*Se adjuntan {n_imagenes} imagen{s} radiográfica{s} para análisis visual directo.*\n')
         positivos = [d for d in radio.diagnoses if d != 'no_finding']
         if positivos:
             p.append('**Hallazgos positivos:**')
@@ -205,41 +207,47 @@ def build_prompt(req: DiagnosticoRequest, tiene_imagen: bool = False) -> Tuple[s
         p.append('')
 
     if con_lab:
-        lab = req.laboratorio
-        p.append('## RESULTADOS DE LABORATORIO\n')
+        labs = req.laboratorio
+        total = len(labs)
+        titulo = f'## RESULTADOS DE LABORATORIO ({total} archivos)\n' if total > 1 else '## RESULTADOS DE LABORATORIO\n'
+        p.append(titulo)
 
-        if lab.alertas:
-            p.append('**Alertas:**')
-            for a in lab.alertas:
-                p.append(f'  ⚠ {a}')
-            p.append('')
+        for idx, lab in enumerate(labs):
+            if total > 1:
+                p.append(f'### Hemograma {idx + 1}\n')
 
-        if lab.hematologia and lab.hematologia.parametros:
-            p.append('**Hematología:**')
-            for param in lab.hematologia.parametros:
-                flag = f' [{param.flag}]' if param.flag else ''
-                p.append(f'  - {param.test}: {param.valor} {param.unidad}{flag} → {param.estado}')
-            p.append('')
+            if lab.alertas:
+                p.append('**Alertas:**')
+                for a in lab.alertas:
+                    p.append(f'  ⚠ {a}')
+                p.append('')
 
-        if lab.quimica and lab.quimica.parametros:
-            p.append('**Química sanguínea:**')
-            for param in lab.quimica.parametros:
-                flag = f' [{param.flag}]' if param.flag else ''
-                p.append(f'  - {param.test}: {param.valor} {param.unidad}{flag} → {param.estado}')
-            p.append('')
+            if lab.hematologia and lab.hematologia.parametros:
+                p.append('**Hematología:**')
+                for param in lab.hematologia.parametros:
+                    flag = f' [{param.flag}]' if param.flag else ''
+                    p.append(f'  - {param.test}: {param.valor} {param.unidad}{flag} → {param.estado}')
+                p.append('')
 
-        if lab.serologia and lab.serologia.parametros:
-            p.append('**Serología:**')
-            for param in lab.serologia.parametros:
-                pos = ' ⚠ POSITIVO' if param.positivo else ''
-                p.append(f'  - {param.test}: {param.resultado}{pos}')
-            p.append('')
+            if lab.quimica and lab.quimica.parametros:
+                p.append('**Química sanguínea:**')
+                for param in lab.quimica.parametros:
+                    flag = f' [{param.flag}]' if param.flag else ''
+                    p.append(f'  - {param.test}: {param.valor} {param.unidad}{flag} → {param.estado}')
+                p.append('')
 
-        if lab.comentarios_clinicos:
-            p.append('**Comentarios del laboratorio (IDEXX):**')
-            for c in lab.comentarios_clinicos:
-                p.append(f'  - {c}')
-            p.append('')
+            if lab.serologia and lab.serologia.parametros:
+                p.append('**Serología:**')
+                for param in lab.serologia.parametros:
+                    pos = ' ⚠ POSITIVO' if param.positivo else ''
+                    p.append(f'  - {param.test}: {param.resultado}{pos}')
+                p.append('')
+
+            if lab.comentarios_clinicos:
+                p.append('**Comentarios del laboratorio (IDEXX):**')
+                for c in lab.comentarios_clinicos:
+                    p.append(f'  - {c}')
+                p.append('')
 
     p.append('## SOLICITUD\n')
 
@@ -284,22 +292,18 @@ def build_prompt(req: DiagnosticoRequest, tiene_imagen: bool = False) -> Tuple[s
 
 def build_messages(
     req: DiagnosticoRequest,
-    image_b64: Optional[str] = None,
+    images_b64: List[str] = [],
 ) -> Tuple[str, list]:
     """Devuelve (escenario, messages list para OpenAI)."""
-    escenario, text = build_prompt(req, tiene_imagen=image_b64 is not None)
+    escenario, text = build_prompt(req, n_imagenes=len(images_b64))
 
-    if image_b64:
-        user_content: Any = [
-            {'type': 'text', 'text': text},
-            {
+    if images_b64:
+        user_content: Any = [{'type': 'text', 'text': text}]
+        for b64 in images_b64:
+            user_content.append({
                 'type': 'image_url',
-                'image_url': {
-                    'url': f'data:image/png;base64,{image_b64}',
-                    'detail': 'high',
-                },
-            },
-        ]
+                'image_url': {'url': f'data:image/png;base64,{b64}', 'detail': 'high'},
+            })
     else:
         user_content = text
 

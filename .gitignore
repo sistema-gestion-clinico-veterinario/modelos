@@ -8,11 +8,12 @@ TAREAS_CLAUDE_CODE.md
 *.nii
 *.nii.gz
 
-# Checkpoints — NO subir (archivos pesados)
-checkpoints/
+# Checkpoints — NO subir (archivos pesados), excepto el modelo de producción
+checkpoints/**
 *.pth
 *.pt
 *.ckpt
+!checkpoints/best_densenet_v2.pth
 
 # Resultados JSON sí se suben (son livianos)
 # resnet50_results.json → OK subir
