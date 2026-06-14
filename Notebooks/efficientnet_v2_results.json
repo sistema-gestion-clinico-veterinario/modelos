@@ -1,0 +1,21 @@
+{
+    "model": "efficientnet_b0",
+    "task": "TA-004E",
+    "augmentation": "v2",
+    "test_auc": 0.8802,
+    "test_f1": 0.6241,
+    "best_val_auc": 0.8798,
+    "best_epoch": 23,
+    "baseline_auc": 0.8862,
+    "delta_auc": -0.006,
+    "params": {
+        "batch_size": 16,
+        "lr_feature": 0.0002805758207667253,
+        "lr_finetune": 0.0003984727409321966,
+        "weight_decay": 3.776663327107337e-06,
+        "dropout": 0.4832290311184182,
+        "scheduler": "StepLR",
+        "fe_epochs": 5,
+        "ft_epochs": 25
+    }
+}

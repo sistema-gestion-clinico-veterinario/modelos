@@ -1,0 +1,16 @@
+{
+    "model": "resnet50",
+    "val_auc": 0.8499197330774848,
+    "test_auc": 0.861883691280282,
+    "test_f1_macro": 0.5976663645182155,
+    "test_accuracy": 0.8408510638297872,
+    "epochs_trained": 17,
+    "best_epoch": 7,
+    "inference_time_sec": 0.00020357966423034668,
+    "batch_size": 32,
+    "learning_rate": 0.0001,
+    "weight_decay": 0.0001,
+    "phase1_epochs": 5,
+    "num_classes": 5,
+    "dataset_split": "train: 4914 | val: 1063 | test: 940"
+}

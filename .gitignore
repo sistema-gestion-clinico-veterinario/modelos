@@ -1,0 +1,78 @@
+# Archivos internos de Claude Code — NO subir
+CONTEXT.md
+TAREAS_CLAUDE_CODE.md
+
+# Dataset — NO subir (45 GB, local)
+*.dcm
+*.dicom
+*.nii
+*.nii.gz
+
+# Checkpoints — NO subir (archivos pesados)
+checkpoints/
+*.pth
+*.pt
+*.ckpt
+
+# Resultados JSON sí se suben (son livianos)
+# resnet50_results.json → OK subir
+
+# Datos locales
+data/
+dataset/
+Radiografias/
+Hemogramas/
+
+# Mapping privado hemogramas (datos personales — NUNCA subir)
+hemogramas_mapping_PRIVADO.csv
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# W&B — logs locales (las métricas viven en wandb.ai, no en el repo)
+wandb/
+Notebooks/wandb/
+
+# Entornos virtuales
+venv/
+env/
+.env
+.venv
+
+# IDEs
+.vscode/
+.idea/
+*.suo
+*.user
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Modelos exportados (pesados)
+*.onnx
+*.tflite
+*.pb
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

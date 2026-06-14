@@ -1,0 +1,21 @@
+{
+    "model": "densenet121",
+    "task": "TA-004F",
+    "augmentation": "v2",
+    "test_auc": 0.8844,
+    "test_f1": 0.6077,
+    "best_val_auc": 0.8786,
+    "best_epoch": 20,
+    "baseline_auc": 0.8902,
+    "delta_auc": -0.0058,
+    "params": {
+        "batch_size": 16,
+        "lr_feature": 8.770946743725407e-05,
+        "lr_finetune": 4.8901685083296995e-05,
+        "weight_decay": 9.061902594114385e-06,
+        "dropout": 0.2739417822102108,
+        "scheduler": "ReduceLROnPlateau",
+        "fe_epochs": 5,
+        "ft_epochs": 25
+    }
+}

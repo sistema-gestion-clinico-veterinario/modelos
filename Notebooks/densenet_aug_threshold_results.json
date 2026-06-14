@@ -1,0 +1,39 @@
+{
+    "model": "densenet121_augmented",
+    "task": "TA-005C",
+    "test_auc": 0.8902,
+    "f1_default_threshold": 0.6196,
+    "f1_optimized": 0.6311,
+    "f1_mejora": 0.0116,
+    "acc_default": 0.8594,
+    "acc_optimized": 0.8738,
+    "optimal_thresholds": {
+        "alveolar_pattern": 0.75,
+        "bronchial_pattern": 0.35,
+        "pleural_effusion": 0.9,
+        "cardiomegaly": 0.7,
+        "no_finding": 0.6
+    },
+    "f1_por_clase": {
+        "alveolar_pattern": {
+            "default": 0.5581,
+            "optimized": 0.5694
+        },
+        "bronchial_pattern": {
+            "default": 0.2817,
+            "optimized": 0.3043
+        },
+        "pleural_effusion": {
+            "default": 0.7552,
+            "optimized": 0.7429
+        },
+        "cardiomegaly": {
+            "default": 0.6801,
+            "optimized": 0.7192
+        },
+        "no_finding": {
+            "default": 0.8226,
+            "optimized": 0.8198
+        }
+    }
+}

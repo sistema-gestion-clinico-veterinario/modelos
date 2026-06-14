@@ -1,0 +1,29 @@
+{
+    "model": "densenet121",
+    "checkpoint": "densenet_best.pth",
+    "strategy": "optimal_threshold_per_class",
+    "classes": [
+        "alveolar_pattern",
+        "bronchial_pattern",
+        "pleural_effusion",
+        "cardiomegaly",
+        "no_finding"
+    ],
+    "optimal_thresholds": {
+        "alveolar_pattern": 0.86,
+        "bronchial_pattern": 0.57,
+        "pleural_effusion": 0.9,
+        "cardiomegaly": 0.61,
+        "no_finding": 0.38
+    },
+    "default_threshold": 0.5,
+    "val_auc": 0.8629846595117325,
+    "test_auc": 0.8717245867819369,
+    "test_f1_macro_base": 0.5845798289944311,
+    "test_f1_macro_opt": 0.6100709892145622,
+    "test_accuracy_opt": 0.8589361702127659,
+    "inference_time_sec": 0.0007970556616783142,
+    "cumple_O4_auc": true,
+    "cumple_O4_f1": false,
+    "cumple_inferencia": true
+}

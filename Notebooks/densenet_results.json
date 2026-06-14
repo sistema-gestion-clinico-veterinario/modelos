@@ -1,0 +1,11 @@
+{
+    "model": "densenet121",
+    "val_auc": 0.8629846595117325,
+    "test_auc": 0.8717245867819369,
+    "test_f1_macro": 0.5845798289944311,
+    "test_accuracy": 0.823404255319149,
+    "epochs_trained": 24,
+    "best_epoch": 14,
+    "inference_time_sec": 0.0014758855104446411,
+    "batch_size": 16
+}

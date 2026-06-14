@@ -1,0 +1,11 @@
+{
+    "model": "efficientnet_b0",
+    "val_auc": 0.850743649034958,
+    "test_auc": 0.8621129451561889,
+    "test_f1_macro": 0.5742486681384149,
+    "test_accuracy": 0.8029787234042554,
+    "epochs_trained": 30,
+    "best_epoch": 30,
+    "inference_time_sec": 0.0002660118043422699,
+    "batch_size": 32
+}

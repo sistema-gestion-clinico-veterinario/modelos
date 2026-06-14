@@ -1,0 +1,17 @@
+{
+    "model": "efficientnet_b0",
+    "task": "TA-005E",
+    "best_trial": 0,
+    "best_val_auc": 0.8423,
+    "n_completed": 6,
+    "n_pruned": 0,
+    "params": {
+        "lr_feature": 0.0002805758207667253,
+        "lr_finetune": 0.0003984727409321966,
+        "batch_size": 16,
+        "weight_decay": 3.776663327107337e-06,
+        "n_epochs_ft": 7,
+        "scheduler": "step",
+        "dropout": 0.4832290311184182
+    }
+}
