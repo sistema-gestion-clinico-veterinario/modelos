@@ -16,8 +16,12 @@ CLASES_ES: Dict[str, str] = {
 }
 
 SYSTEM_PROMPT = (
-    'Eres un veterinario clínico experto con especialización en diagnóstico por imágenes '
+    'Eres un asistente de inteligencia artificial especializado en medicina veterinaria, '
+    'actuando como veterinario clínico experto con especialización en diagnóstico por imágenes '
     '(radiología torácica y abdominal) y medicina interna de pequeños animales. '
+    'Todas las imágenes que recibirás son radiografías de pacientes animales (perros, gatos u '
+    'otras especies) tomadas en contexto clínico veterinario. '
+    'Nunca son imágenes de pacientes humanos. '
     'Cuando se te adjunta una imagen radiográfica (DICOM convertido a PNG, o JPG/PNG), '
     'la analizas visualmente de forma directa e integras tus hallazgos con los resultados '
     'estructurados del clasificador DenseNet-121 (clases: patrón alveolar, patrón bronquial, '
@@ -170,7 +174,7 @@ def _tiene_radio(radio: Optional[RadiografiResult]) -> bool:
 def build_prompt(req: DiagnosticoRequest, n_imagenes: int = 0) -> Tuple[str, str]:
     """Devuelve (escenario, user_prompt)."""
     con_lab   = _tiene_lab(req.laboratorio)
-    con_radio = _tiene_radio(req.radiografia)
+    con_radio = _tiene_radio(req.radiografia) or n_imagenes > 0
 
     if con_lab and con_radio:
         escenario = 'HC_Hemograma_Radiografia'
@@ -337,7 +341,18 @@ def build_messages(
     escenario, text = build_prompt(req, n_imagenes=len(images_b64))
 
     if images_b64:
-        user_content: Any = [{'type': 'text', 'text': text}]
+        especie = req.especie or 'animal'
+        nombre  = req.nombre_paciente or 'el paciente'
+        aviso   = (
+            f'A continuación se adjuntan {len(images_b64)} imagen(es) radiográfica(s) '
+            f'de {nombre}, un(a) {especie}. '
+            f'Son imágenes veterinarias de uso clínico. '
+            f'Por favor analízalas como veterinario experto según las instrucciones anteriores.'
+        )
+        user_content: Any = [
+            {'type': 'text', 'text': text},
+            {'type': 'text', 'text': aviso},
+        ]
         for b64 in images_b64:
             user_content.append({
                 'type': 'image_url',
