@@ -24,7 +24,20 @@ SYSTEM_PROMPT = (
     'efusión pleural, cardiomegalia, sin hallazgos). '
     'Integras historia clínica, resultados de laboratorio y hallazgos radiológicos para '
     'generar diagnósticos diferenciales precisos y planes de manejo veterinario. '
-    'Responde siempre en español, de forma clara y estructurada. '
+    'REGLAS DE REDACCIÓN — debes cumplirlas siempre:\n'
+    '1. INICIA tu respuesta con un encabezado breve del paciente usando exactamente los datos '
+    'recibidos: especie, edad, sexo y peso. Ejemplo: '
+    '"**Paciente:** Perro | Macho | 6 años 9 meses | 12.5 kg"\n'
+    '2. Cita los VALORES NUMÉRICOS EXACTOS del laboratorio (con unidad y rango de referencia '
+    'si están disponibles) al momento de interpretarlos. No generalices: escribe '
+    '"Hematocrito 18 % (ref. 37-55 %)" en lugar de solo "anemia grave".\n'
+    '3. Relaciona EXPLÍCITAMENTE las características del paciente (especie, edad, sexo, peso) '
+    'con cada diagnóstico diferencial. Indica por qué este perfil hace que un diagnóstico '
+    'sea más o menos probable.\n'
+    '4. Si hay varias consultas en el historial, haz un RECORRIDO CRONOLÓGICO: describe la '
+    'evolución de los signos, los cambios en parámetros entre visitas y la respuesta a '
+    'tratamientos previos antes de dar el diagnóstico diferencial.\n'
+    '5. Responde siempre en español, de forma clara y estructurada. '
     'No inventes datos que no estén presentes en la información proporcionada. '
     'Si la información es insuficiente para una conclusión firme, indícalo explícitamente.'
 )
@@ -116,6 +129,7 @@ class DiagnosticoRequest(BaseModel):
     motivo_consulta: str = Field(..., min_length=10,
                                  description='Motivo de consulta / anamnesis')
     especie: str = Field('Perro', description='Perro | Gato | Otro')
+    nombre_paciente: Optional[str] = None
     edad: Optional[str] = None
     sexo: Optional[str] = None
     peso: Optional[str] = None
@@ -167,7 +181,9 @@ def build_prompt(req: DiagnosticoRequest, n_imagenes: int = 0) -> Tuple[str, str
     else:
         escenario = 'HC_solo'
 
-    p: List[str] = ['## HISTORIA CLÍNICA\n']
+    p: List[str] = ['## DATOS DEL PACIENTE\n']
+    if req.nombre_paciente:
+        p.append(f'**Nombre:** {req.nombre_paciente}')
     p.append(f'**Especie:** {req.especie}')
     if req.edad:
         p.append(f'**Edad:** {req.edad}')
@@ -175,7 +191,8 @@ def build_prompt(req: DiagnosticoRequest, n_imagenes: int = 0) -> Tuple[str, str
         p.append(f'**Sexo:** {req.sexo}')
     if req.peso:
         p.append(f'**Peso:** {req.peso}')
-    p.append(f'\n**Motivo de consulta:**\n{req.motivo_consulta}\n')
+    p.append(f'\n## HISTORIA CLÍNICA\n')
+    p.append(f'{req.motivo_consulta}\n')
 
     if con_radio:
         radio = req.radiografia
@@ -253,36 +270,58 @@ def build_prompt(req: DiagnosticoRequest, n_imagenes: int = 0) -> Tuple[str, str
 
     tareas = {
         'HC_solo': (
-            'Con base únicamente en la historia clínica proporcionada, indica:\n'
-            '1. **Diagnósticos diferenciales** (ordenados de mayor a menor probabilidad)\n'
-            '2. **Exámenes complementarios recomendados** (laboratorio, imagen, etc.)\n'
-            '3. **Manejo inicial sugerido**\n'
-            '4. **Signos de alarma** que requieren atención inmediata'
+            'Con base únicamente en la historia clínica proporcionada, redacta tu análisis así:\n'
+            '1. **Resumen del paciente** — repite especie, edad, sexo y peso del encabezado; '
+            'luego resume los motivos de consulta y la evolución cronológica de los signos.\n'
+            '2. **Diagnósticos diferenciales** — lista de mayor a menor probabilidad; para cada '
+            'uno indica por qué los datos de ESTE paciente (especie, edad, sexo, peso, signos '
+            'descritos) lo respaldan o lo hacen menos probable.\n'
+            '3. **Exámenes complementarios recomendados** (laboratorio, imagen, etc.)\n'
+            '4. **Manejo inicial sugerido**\n'
+            '5. **Signos de alarma** que requieren atención inmediata'
         ),
         'HC_Hemograma': (
-            'Con base en la historia clínica y los resultados de laboratorio, indica:\n'
-            '1. **Interpretación integrada de los hallazgos de laboratorio** en contexto clínico\n'
-            '2. **Diagnósticos diferenciales** (ordenados de mayor a menor probabilidad)\n'
-            '3. **Exámenes complementarios recomendados**\n'
-            '4. **Plan terapéutico sugerido**\n'
-            '5. **Pronóstico preliminar**'
+            'Con base en la historia clínica y los resultados de laboratorio, redacta tu análisis así:\n'
+            '1. **Resumen del paciente** — especie, edad, sexo, peso; evolución cronológica de '
+            'los signos clínicos a lo largo de las consultas registradas.\n'
+            '2. **Interpretación analítica del hemograma** — menciona CADA parámetro alterado '
+            'con su valor exacto y el rango de referencia; explica su significado clínico para '
+            'ESTE paciente (especie, edad, sexo, peso).\n'
+            '3. **Diagnósticos diferenciales** — ordenados de mayor a menor probabilidad; '
+            'argumenta con los valores del laboratorio y las características del paciente.\n'
+            '4. **Exámenes complementarios recomendados**\n'
+            '5. **Plan terapéutico sugerido**\n'
+            '6. **Pronóstico preliminar**'
         ),
         'HC_Radiografia': (
-            'Con base en la historia clínica y los hallazgos radiológicos, indica:\n'
-            '1. **Interpretación de los hallazgos radiológicos** en contexto clínico\n'
-            '2. **Diagnósticos diferenciales** (ordenados de mayor a menor probabilidad)\n'
-            '3. **Exámenes complementarios recomendados** (laboratorio u otras imágenes)\n'
-            '4. **Plan terapéutico sugerido**\n'
-            '5. **Pronóstico preliminar**'
+            'Con base en la historia clínica y los hallazgos radiológicos, redacta tu análisis así:\n'
+            '1. **Resumen del paciente** — especie, edad, sexo, peso; evolución cronológica de '
+            'los signos clínicos.\n'
+            '2. **Interpretación radiológica detallada** — describe cada hallazgo (positivo o '
+            'limítrofe) con su probabilidad; analiza qué estructuras anatómicas están afectadas '
+            'y si el tamaño/peso del paciente influye en la presentación.\n'
+            '3. **Diagnósticos diferenciales** — ordenados de mayor a menor probabilidad; '
+            'argumenta con los hallazgos radiológicos y el perfil del paciente.\n'
+            '4. **Exámenes complementarios recomendados** (laboratorio u otras imágenes)\n'
+            '5. **Plan terapéutico sugerido**\n'
+            '6. **Pronóstico preliminar**'
         ),
         'HC_Hemograma_Radiografia': (
             'Con base en la historia clínica, los hallazgos radiológicos y los resultados '
-            'de laboratorio, indica:\n'
-            '1. **Correlación clínico-radiológico-laboratorial** (integración de todos los hallazgos)\n'
-            '2. **Diagnósticos diferenciales** (ordenados de mayor a menor probabilidad)\n'
-            '3. **Exámenes complementarios adicionales** (si aplica)\n'
-            '4. **Plan terapéutico integral** (medicación, seguimiento y monitoreo)\n'
-            '5. **Pronóstico**'
+            'de laboratorio, redacta tu análisis así:\n'
+            '1. **Resumen del paciente** — especie, edad, sexo, peso; evolución cronológica de '
+            'los signos clínicos a lo largo de las consultas registradas.\n'
+            '2. **Interpretación analítica del hemograma** — cada parámetro alterado con valor '
+            'exacto y rango de referencia; significado clínico para ESTE paciente.\n'
+            '3. **Interpretación radiológica** — cada hallazgo con su probabilidad; descripción '
+            'anatómica y relevancia clínica.\n'
+            '4. **Correlación clínico-radiológico-laboratorial** — integra los tres conjuntos '
+            'de datos para construir la hipótesis diagnóstica más probable.\n'
+            '5. **Diagnósticos diferenciales** — ordenados de mayor a menor probabilidad; '
+            'fundamentados en los datos reales del paciente.\n'
+            '6. **Exámenes complementarios adicionales** (si aplica)\n'
+            '7. **Plan terapéutico integral** (medicación, seguimiento y monitoreo)\n'
+            '8. **Pronóstico**'
         ),
     }
     p.append(tareas[escenario])
