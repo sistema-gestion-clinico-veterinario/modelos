@@ -113,6 +113,7 @@ async def _sse_stream(messages: list, escenario: str) -> AsyncGenerator[str, Non
 async def generar_diagnostico(
     motivo_consulta: str         = Form(..., min_length=10),
     especie: str                 = Form('Perro'),
+    nombre_paciente: Optional[str] = Form(None),
     edad: Optional[str]          = Form(None),
     sexo: Optional[str]          = Form(None),
     peso: Optional[str]          = Form(None),
@@ -185,6 +186,7 @@ async def generar_diagnostico(
     req = DiagnosticoRequest(
         motivo_consulta=motivo_consulta,
         especie=especie,
+        nombre_paciente=nombre_paciente,
         edad=edad,
         sexo=sexo,
         peso=peso,
