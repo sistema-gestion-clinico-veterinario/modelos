@@ -14,7 +14,6 @@ from diagnostico import (
     RadiografiResult,
     RADIO_EXTS,
     build_messages,
-    image_to_b64,
 )
 from laboratorio import IMAGE_EXTENSIONS, extraer_laboratorio
 from predictor import predictor
@@ -128,9 +127,9 @@ async def generar_diagnostico(
     radios = [f for f in archivo_radiografia if f and f.filename]
     labs   = [f for f in archivo_hemograma   if f and f.filename]
 
-    # ── Radiografías (múltiples) ─────────────────────────────────────────────
-    images_b64:  List[str] = []
+    # ── Radiografías (múltiples) — solo predicciones DenseNet, sin enviar imagen al LLM ──
     radio_result: Optional[RadiografiResult] = None
+    n_radiografias = 0
 
     if radios:
         all_preds: List[dict] = []
@@ -141,10 +140,7 @@ async def generar_diagnostico(
             raw = await f.read()
             if not raw:
                 continue
-            try:
-                images_b64.append(image_to_b64(raw, ext))
-            except Exception as e:
-                raise HTTPException(422, f'No se pudo procesar {f.filename}: {e}')
+            n_radiografias += 1
             try:
                 pred = predictor.predict(raw, f.filename)
                 all_preds.append(pred)
@@ -153,7 +149,7 @@ async def generar_diagnostico(
 
         if all_preds:
             radio_result = _combinar_predicciones(all_preds)
-        elif images_b64:
+        else:
             radio_result = RadiografiResult()
 
     # ── Hemogramas (múltiples) ───────────────────────────────────────────────
@@ -190,11 +186,12 @@ async def generar_diagnostico(
         edad=edad,
         sexo=sexo,
         peso=peso,
+        n_radiografias=n_radiografias,
         radiografia=radio_result,
         laboratorio=lab_results if lab_results else None,
     )
 
-    escenario, messages = build_messages(req, images_b64)
+    escenario, messages = build_messages(req)
 
     return StreamingResponse(
         _sse_stream(messages, escenario),
