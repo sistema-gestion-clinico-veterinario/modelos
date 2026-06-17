@@ -65,10 +65,20 @@ def _combinar_predicciones(all_preds: List[dict]) -> RadiografiResult:
     return RadiografiResult(diagnoses=diagnoses, predictions=combined)
 
 
-async def _sse_stream(messages: list, escenario: str) -> AsyncGenerator[str, None]:
+async def _sse_stream(
+    messages: list,
+    escenario: str,
+    image_quality: Optional[dict] = None,
+) -> AsyncGenerator[str, None]:
     client = _get_client()
 
-    yield f"data: {json.dumps({'type': 'meta', 'escenario': escenario, 'modelo': _MODEL})}\n\n"
+    meta: dict = {'type': 'meta', 'escenario': escenario, 'modelo': _MODEL}
+    if image_quality and not image_quality.get('parece_radiografia', True):
+        meta['image_quality'] = {
+            'parece_radiografia': False,
+            'issues': image_quality.get('issues', []),
+        }
+    yield f"data: {json.dumps(meta)}\n\n"
 
     current_messages = list(messages)
     continuaciones   = 0
@@ -129,6 +139,8 @@ async def generar_diagnostico(
 
     # ── Radiografías (múltiples) — solo predicciones DenseNet, sin enviar imagen al LLM ──
     radio_result: Optional[RadiografiResult] = None
+    dicom_metadata: Optional[dict] = None
+    image_quality: Optional[dict] = None
     n_radiografias = 0
 
     if radios:
@@ -149,8 +161,18 @@ async def generar_diagnostico(
 
         if all_preds:
             radio_result = _combinar_predicciones(all_preds)
+            dicom_metadata = next(
+                (p['dicom_metadata'] for p in all_preds if p.get('dicom_metadata')),
+                None
+            )
+            image_quality = next(
+                (p['image_quality'] for p in all_preds if p.get('image_quality')),
+                None
+            )
         else:
             radio_result = RadiografiResult()
+            dicom_metadata = None
+            image_quality = None
 
     # ── Hemogramas (múltiples) ───────────────────────────────────────────────
     lab_results: List[LaboratorioResult] = []
@@ -189,12 +211,14 @@ async def generar_diagnostico(
         n_radiografias=n_radiografias,
         radiografia=radio_result,
         laboratorio=lab_results if lab_results else None,
+        dicom_metadata=dicom_metadata,
+        image_quality=image_quality,
     )
 
     escenario, messages = build_messages(req)
 
     return StreamingResponse(
-        _sse_stream(messages, escenario),
+        _sse_stream(messages, escenario, image_quality),
         media_type='text/event-stream',
         headers={
             'Cache-Control': 'no-cache',
