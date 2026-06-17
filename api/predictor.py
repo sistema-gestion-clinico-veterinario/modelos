@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 from torchvision import models
 from config import CLASSES, NUM_CLASSES, DROPOUT, THRESHOLDS, CKPT_PATH, TRANSFORM
-from preprocessing import prepare
+from preprocessing import prepare, extract_dicom_metadata, check_image_quality
 
 
 class ModelPredictor:
@@ -47,13 +47,18 @@ class ModelPredictor:
             if positive:
                 diagnoses.append(cls)
 
-        return {
+        result = {
             'model':        'densenet121',
             'file_type':    file_type,
             'predictions':  predictions,
             'diagnoses':    diagnoses,
-            'inference_ms': round((time.time() - t0) * 1000, 2)
+            'inference_ms': round((time.time() - t0) * 1000, 2),
         }
+        if file_type == 'dicom':
+            result['dicom_metadata'] = extract_dicom_metadata(file_bytes)
+        else:
+            result['image_quality'] = check_image_quality(file_bytes)
+        return result
 
 
 predictor = ModelPredictor()

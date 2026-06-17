@@ -145,6 +145,8 @@ class DiagnosticoRequest(BaseModel):
     n_radiografias: int = 0
     radiografia: Optional[RadiografiResult] = None
     laboratorio: Optional[List[LaboratorioResult]] = None
+    dicom_metadata: Optional[Dict[str, Any]] = None
+    image_quality: Optional[Dict[str, Any]] = None
 
 
 # ── Schema de salida ─────────────────────────────────────────────────────────
@@ -204,6 +206,39 @@ def build_prompt(req: DiagnosticoRequest) -> Tuple[str, str]:
     p.append(f'\n## HISTORIA CLÍNICA\n')
     p.append(f'{req.motivo_consulta}\n')
 
+    if req.dicom_metadata:
+        meta = req.dicom_metadata
+        p.append('## METADATOS DEL ESTUDIO RADIOLÓGICO\n')
+        labels = {
+            'body_part':     'Región evaluada',
+            'view_position': 'Proyección',
+            'modality':      'Modalidad',
+            'study_date':    'Fecha del estudio',
+            'institution':   'Institución',
+            'kvp':           'Tensión (kVp)',
+            'patient_age':   'Edad (DICOM)',
+            'patient_sex':   'Sexo (DICOM)',
+        }
+        for key, label in labels.items():
+            if key in meta:
+                p.append(f'- {label}: {meta[key]}')
+        p.append('')
+
+        TORAX_KEYWORDS = {'chest', 'thorax', 'torax', 'thoracic', 'lung', 'pulmon'}
+        body_raw = meta.get('body_part', '').lower()
+        if body_raw and not any(kw in body_raw for kw in TORAX_KEYWORDS):
+            p.append(
+                f'*Nota para la redacción: los metadatos indican que esta imagen corresponde '
+                f'a la región **{meta["body_part"]}**, no al tórax. En el reporte debes: '
+                f'(a) mencionar que los metadatos señalan esta región anatómica; '
+                f'(b) proporcionar el análisis disponible con los resultados del modelo; '
+                f'(c) aclarar explícitamente que el modelo fue entrenado en radiología torácica '
+                f'y que, por tanto, su aplicación sobre una región diferente reduce la '
+                f'confiabilidad de las predicciones; '
+                f'(d) indicar que no es posible corroborar con certeza los hallazgos para '
+                f'esta zona anatómica y que el médico veterinario debe validarlo.*\n'
+            )
+
     if con_radio:
         radio = req.radiografia
         n = req.n_radiografias
@@ -211,6 +246,30 @@ def build_prompt(req: DiagnosticoRequest) -> Tuple[str, str]:
         p.append(f'## PREDICCIONES DEL MODELO CNN — {n} radiografía{s} procesada{s}\n')
         p.append('*Modelo: DenseNet-121 entrenado en radiología veterinaria torácica. '
                  'Las predicciones son probabilísticas y no constituyen diagnóstico definitivo.*\n')
+
+        quality = req.image_quality
+        if quality and quality.get('issues'):
+            issues_txt = '; '.join(quality['issues'])
+            p.append(
+                f'*Nota para la redacción: el análisis visual de la imagen PNG/JPG detectó '
+                f'las siguientes anomalías: {issues_txt}. '
+                f'En el reporte menciona que la imagen presenta características que no son '
+                f'típicas de una radiografía torácica estándar, proporciona el análisis '
+                f'disponible con los resultados del modelo, pero indica que no es posible '
+                f'confirmar con certeza que corresponde a un estudio radiológico torácico '
+                f'y que el médico veterinario debe verificar el archivo antes de interpretar '
+                f'estos hallazgos.*\n'
+            )
+        elif radio and radio.predictions:
+            max_prob = max((v.get('probability', 0) for v in radio.predictions.values()), default=0)
+            if max_prob < 0.20:
+                p.append(
+                    '*Nota para la redacción: las probabilidades del análisis son muy bajas '
+                    f'en todas las categorías (máximo: {max_prob:.0%}), lo que puede indicar '
+                    'que la imagen no corresponde a una radiografía torácica válida o que la '
+                    'calidad técnica es insuficiente. Menciona esta limitación en el reporte '
+                    'e indica que el médico veterinario debe verificar el archivo.*\n'
+                )
 
         positivos = [d for d in radio.diagnoses if d != 'no_finding'] if radio else []
         if positivos:
