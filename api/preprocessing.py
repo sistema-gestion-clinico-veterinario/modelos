@@ -54,7 +54,7 @@ def check_image_quality(data: bytes) -> dict:
     Retorna un dict con flags y el motivo si no parece radiografía.
     """
     try:
-        img = Image.open(BytesIO(data)).convert('RGB')
+        img = Image.open(BytesIO(data)).convert('RGB').resize((256, 256), Image.LANCZOS)
         arr = np.array(img, dtype=np.float32)
 
         r, g, b = arr[:, :, 0], arr[:, :, 1], arr[:, :, 2]
