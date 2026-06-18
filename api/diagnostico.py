@@ -34,10 +34,10 @@ SYSTEM_PROMPT = (
     'No generalices: escribe "Hematocrito 18 % (ref. 37-55 %)" en lugar de "anemia grave".\n'
     '4. Relaciona EXPLÍCITAMENTE el perfil del paciente (especie, edad, sexo, peso) '
     'con cada hallazgo: indica por qué ese perfil hace un hallazgo más o menos probable.\n'
-    '5. Si hay varias consultas, haz un RECORRIDO CRONOLÓGICO usando las FECHAS EXACTAS '
-    'que aparecen en el historial (formato: "el [fecha], el paciente fue presentado por..."). '
-    'No uses frases vagas como "en la primera consulta" o "posteriormente"; cita la fecha '
-    'concreta de cada visita y lo que ocurrió en ella.\n'
+    '5. Cada consulta en el historial tiene el encabezado "=== CONSULTA N | FECHA: DD de MMMM de YYYY ===". '
+    'DEBES citar esa fecha exacta cada vez que hagas referencia a esa consulta, '
+    'aunque solo haya una. Formato: "El DD de MMMM de YYYY, el paciente fue presentado por...". '
+    'Nunca uses "en la primera consulta", "recientemente" o "posteriormente" sin la fecha exacta.\n'
     '6. Usa lenguaje clínico radiológico apropiado. Evita mencionar nombres de modelos de IA, '
     'arquitecturas de redes neuronales o términos técnicos de machine learning (no escribas '
     '"DenseNet", "CNN", "modelo", "umbral", "probabilidad del modelo" ni similares en el texto '
@@ -355,10 +355,15 @@ def build_prompt(req: DiagnosticoRequest) -> Tuple[str, str]:
 
     CRONOLOGIA = (
         '**Resumen del paciente y evolución cronológica** — indica especie, edad, sexo y peso. '
-        'Luego narra la evolución usando las FECHAS EXACTAS del historial: '
-        '"El [fecha exacta], el paciente fue presentado por [motivo]. [Signos, examen, hallazgos]. '
-        'El [fecha exacta de siguiente consulta], se observó [cambios, evolución, nuevos signos]." '
-        'Destaca cambios entre visitas: mejoría, deterioro o nuevos síntomas.'
+        'El historial incluye una o más consultas; cada una tiene el encabezado '
+        '"=== CONSULTA N | FECHA: DD de MMMM de YYYY ===". '
+        'DEBES usar esa fecha exacta cada vez que menciones esa consulta. '
+        'Formato obligatorio: "El DD de MMMM de YYYY, el paciente fue presentado por [motivo]. '
+        '[Signos, examen físico, hallazgos relevantes]." '
+        'Si hay más de una consulta, narra cada una con su fecha exacta y destaca cambios '
+        'entre visitas (mejoría, deterioro, nuevos síntomas). '
+        'NUNCA uses frases como "en la primera consulta", "posteriormente" o "recientemente" '
+        'sin acompañarlas de la fecha exacta.'
     )
 
     tareas = {
