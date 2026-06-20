@@ -224,19 +224,24 @@ def build_prompt(req: DiagnosticoRequest) -> Tuple[str, str]:
                 p.append(f'- {label}: {meta[key]}')
         p.append('')
 
-        TORAX_KEYWORDS = {'chest', 'thorax', 'torax', 'thoracic', 'lung', 'pulmon'}
+        TORAX_KEYWORDS = {'chest', 'thorax', 'torax', 'thoracic', 'lung', 'pulmon', 'tórax', 'pulmón'}
         body_raw = meta.get('body_part', '').lower()
         if body_raw and not any(kw in body_raw for kw in TORAX_KEYWORDS):
+            region = meta['body_part']
             p.append(
-                f'*Nota para la redacción: los metadatos indican que esta imagen corresponde '
-                f'a la región **{meta["body_part"]}**, no al tórax. En el reporte debes: '
-                f'(a) mencionar que los metadatos señalan esta región anatómica; '
-                f'(b) proporcionar el análisis disponible con los resultados del modelo; '
-                f'(c) aclarar explícitamente que el modelo fue entrenado en radiología torácica '
-                f'y que, por tanto, su aplicación sobre una región diferente reduce la '
-                f'confiabilidad de las predicciones; '
-                f'(d) indicar que no es posible corroborar con certeza los hallazgos para '
-                f'esta zona anatómica y que el médico veterinario debe validarlo.*\n'
+                f'*Nota para la redacción — IMPORTANTE: los metadatos DICOM identifican esta imagen '
+                f'como **{region}**, NO como tórax. En el reporte DEBES nombrar explícitamente esta '
+                f'región con esa palabra (ejemplo de frase a usar: "Los metadatos del estudio indican '
+                f'que la imagen corresponde a {region.lower()} y no al tórax"). No te limites a decir '
+                f'"otra región" o "región diferente": usa el nombre concreto **{region}**. Luego: '
+                f'(a) proporciona el análisis disponible con los resultados del modelo, aclarando que '
+                f'no son fiables para esta región; '
+                f'(b) explica que el modelo CNN fue entrenado exclusivamente en radiología torácica '
+                f'veterinaria, por lo que sus predicciones sobre {region.lower()} carecen de validez '
+                f'clínica; '
+                f'(c) indica que no es posible corroborar hallazgos para {region.lower()} con este '
+                f'modelo y que el médico veterinario debe solicitar la evaluación radiológica '
+                f'apropiada para esa zona.*\n'
             )
 
     if con_radio:
@@ -246,6 +251,20 @@ def build_prompt(req: DiagnosticoRequest) -> Tuple[str, str]:
         p.append(f'## PREDICCIONES DEL MODELO CNN — {n} radiografía{s} procesada{s}\n')
         p.append('*Modelo: DenseNet-121 entrenado en radiología veterinaria torácica. '
                  'Las predicciones son probabilísticas y no constituyen diagnóstico definitivo.*\n')
+
+        if req.dicom_metadata:
+            proy = req.dicom_metadata.get('view_position')
+            mod  = req.dicom_metadata.get('modality')
+            if proy or mod:
+                datos_estudio = ' · '.join(filter(None, [
+                    f'Proyección: {proy}' if proy else None,
+                    f'Modalidad: {mod}' if mod else None,
+                ]))
+                p.append(
+                    f'*Nota para la redacción: el estudio tiene estos datos técnicos — {datos_estudio}. '
+                    f'DEBES iniciar la sección de Hallazgos radiológicos con esta línea exacta: '
+                    f'"**Datos del estudio:** {datos_estudio}". Luego continúa con los hallazgos.*\n'
+                )
 
         quality = req.image_quality
         if quality and quality.get('issues'):

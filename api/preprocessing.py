@@ -135,15 +135,43 @@ def extract_dicom_metadata(data: bytes) -> dict:
         'DX': 'Radiografía digital (DX)',
         'RG': 'Radiografía convencional (RG)',
     }
+    BODY_PART_MAP = {
+        'SKULL':     'Cráneo',
+        'HEAD':      'Cabeza',
+        'CHEST':     'Tórax',
+        'THORAX':    'Tórax',
+        'ABDOMEN':   'Abdomen',
+        'PELVIS':    'Pelvis',
+        'SPINE':     'Columna vertebral',
+        'CSPINE':    'Columna cervical',
+        'TSPINE':    'Columna torácica',
+        'LSPINE':    'Columna lumbar',
+        'NECK':      'Cuello',
+        'EXTREMITY': 'Extremidad',
+        'HAND':      'Mano',
+        'FOOT':      'Pata',
+        'KNEE':      'Rodilla',
+        'SHOULDER':  'Hombro',
+        'HIP':       'Cadera',
+        'ANKLE':     'Tobillo',
+        'WRIST':     'Muñeca',
+        'ELBOW':     'Codo',
+        'JAW':       'Mandíbula',
+        'TEETH':     'Dientes',
+        'LEG':       'Pierna',
+        'ARM':       'Brazo',
+        'WHOLEBODY': 'Cuerpo completo',
+    }
 
-    view_raw     = safe('ViewPosition').upper()
-    sex_raw      = safe('PatientSex').upper()
-    modality_raw = safe('Modality').upper()
-    age_raw      = safe('PatientAge')
-    date_raw     = safe('StudyDate')
+    view_raw      = safe('ViewPosition').upper()
+    sex_raw       = safe('PatientSex').upper()
+    modality_raw  = safe('Modality').upper()
+    age_raw       = safe('PatientAge')
+    date_raw      = safe('StudyDate')
+    body_part_raw = safe('BodyPartExamined').upper()
 
     meta = {
-        'body_part':     safe('BodyPartExamined').title() or None,
+        'body_part':     BODY_PART_MAP.get(body_part_raw, body_part_raw.title()) or None,
         'view_position': VIEW_MAP.get(view_raw, view_raw) or None,
         'modality':      MODALITY_MAP.get(modality_raw, modality_raw) or None,
         'patient_age':   parse_age(age_raw) if age_raw else None,
