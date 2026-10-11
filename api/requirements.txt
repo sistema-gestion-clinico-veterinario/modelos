@@ -12,3 +12,4 @@ easyocr>=1.7.0
 opencv-python-headless>=4.8.0
 openai>=1.30.0
 python-dotenv>=1.0.0
+PyJWT[crypto]==2.9.0

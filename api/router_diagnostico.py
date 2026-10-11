@@ -4,7 +4,7 @@ import tempfile
 from pathlib import Path
 from typing import AsyncGenerator, Dict, List, Optional
 
-from fastapi import APIRouter, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from fastapi.responses import StreamingResponse
 from openai import AsyncOpenAI
 
@@ -17,6 +17,7 @@ from diagnostico import (
 )
 from laboratorio import IMAGE_EXTENSIONS, extraer_laboratorio
 from predictor import predictor
+from service_security import require_ai_operation
 
 router_diag = APIRouter(prefix='/ia', tags=['diagnostico'])
 
@@ -128,6 +129,7 @@ async def generar_diagnostico(
     peso: Optional[str]          = Form(None),
     archivo_radiografia: List[UploadFile] = File(default=[]),
     archivo_hemograma:   List[UploadFile] = File(default=[]),
+    _claims: dict = Depends(require_ai_operation('diagnostico')),
 ):
     try:
         _get_client()

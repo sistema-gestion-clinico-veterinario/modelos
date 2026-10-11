@@ -4,7 +4,6 @@ load_dotenv()
 
 from fastapi import FastAPI
 from fastapi.responses import Response
-from fastapi.middleware.cors import CORSMiddleware
 from predictor import predictor
 from router import router
 from router_laboratorio import router_lab
@@ -22,13 +21,6 @@ app = FastAPI(
     description='Microservicio IA veterinario: radiografías (DenseNet-121) + hemogramas + diagnóstico LLM',
     version='2.0.0',
     lifespan=lifespan
-)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=['*'],
-    allow_methods=['*'],
-    allow_headers=['*']
 )
 
 app.include_router(router)

@@ -1,7 +1,8 @@
 from pathlib import Path
-from fastapi import APIRouter, File, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from config import ALLOWED_EXTENSIONS, CLASSES, THRESHOLDS
 from predictor import predictor
+from service_security import require_ai_operation
 
 router = APIRouter()
 
@@ -14,8 +15,8 @@ def health():
     }
 
 
-@router.get('/info')
-def info():
+@router.get('/info', include_in_schema=False)
+def info(_claims: dict = Depends(require_ai_operation('radiografia'))):
     return {
         'model':               'densenet121',
         'checkpoint':          'best_densenet_v2.pth',
@@ -28,7 +29,10 @@ def info():
 
 
 @router.post('/predict/radiografia')
-async def predict_radiografia(file: UploadFile = File(...)):
+async def predict_radiografia(
+    file: UploadFile = File(...),
+    _claims: dict = Depends(require_ai_operation('radiografia')),
+):
     ext = Path(file.filename).suffix.lower() if file.filename else ''
     if ext and ext not in ALLOWED_EXTENSIONS:
         raise HTTPException(

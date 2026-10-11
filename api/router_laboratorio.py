@@ -1,7 +1,8 @@
 import tempfile
 from pathlib import Path
-from fastapi import APIRouter, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from laboratorio import extraer_laboratorio, IMAGE_EXTENSIONS
+from service_security import require_ai_operation
 
 router_lab = APIRouter(prefix='/ia', tags=['laboratorio'])
 
@@ -24,6 +25,7 @@ def _get_ocr_reader():
 async def analizar_laboratorio(
     archivo: UploadFile = File(...),
     especie: str = Form('Perro'),
+    _claims: dict = Depends(require_ai_operation('laboratorio')),
 ):
     ext = Path(archivo.filename).suffix.lower() if archivo.filename else ''
     if not ext or ext not in ALLOWED_EXTENSIONS:
